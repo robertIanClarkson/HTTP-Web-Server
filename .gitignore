@@ -2,3 +2,4 @@ web-server-spring-2020-web-server-gao-clarkson.iml
 .idea/
 *.class
 conf/
+out/
