@@ -3,7 +3,7 @@ import java.io.*;
 
 public class WebServer {
 
-    public static final int DEFAULT_PORT = 3100;
+    public static final int DEFAULT_PORT = 8096;
 
     public static void main(String[] args) throws IOException {
         ServerSocket socket = new ServerSocket( DEFAULT_PORT );
