@@ -1,5 +1,6 @@
 web-server-spring-2020-web-server-gao-clarkson.iml
 .idea/
+.DS_Store
 *.class
 conf/httpd.conf
 out/
