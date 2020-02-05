@@ -6,7 +6,7 @@ public class WebServer {
     public static final int DEFAULT_PORT = 8096;
 
     public static void main(String[] args) throws IOException {
-        Configuration config = new Configuration("conf/httpd.conf");
+        Configuration config = new Configuration("conf/httpd.conf", "conf/mime.types");
 
 //        ServerSocket socket = new ServerSocket( DEFAULT_PORT );
 //        Socket client = null;
