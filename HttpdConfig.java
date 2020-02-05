@@ -4,11 +4,10 @@ import java.io.IOException;
 
 public class HttpdConfig {
 
-    private BufferedReader reader;
-
-    public String serverRoot, documentRoot, listen, logFile, scriptAlias, aliasA, aliasB;
+    private String serverRoot, documentRoot, listen, logFile, scriptAlias, aliasA, aliasB;
 
     HttpdConfig( String fileName ) {
+        BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader( fileName ));
             serverRoot = stripQuotes(stripData(reader.readLine()));
@@ -23,7 +22,35 @@ public class HttpdConfig {
         }
     }
 
-    private String stripQuotes( String line ) {
+    public String getServerRoot() {
+        return serverRoot;
+    }
+
+    public String getDocumentRoot() {
+        return documentRoot;
+    }
+
+    public String getListen() {
+        return listen;
+    }
+
+    public String getLogFile() {
+        return logFile;
+    }
+
+    public String getScriptAlias() {
+        return scriptAlias;
+    }
+
+    public String getAliasA() {
+        return aliasA;
+    }
+
+    public String getAliasB() {
+        return aliasB;
+    }
+
+    private String stripQuotes(String line ) {
         int x = line.indexOf("\"");
         int y = line.lastIndexOf("\"");
         return line.substring( x+1, y);
