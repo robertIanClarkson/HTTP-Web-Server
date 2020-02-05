@@ -19,7 +19,7 @@ public class HttpdConfig {
             aliasA = stripQuotes(stripData(reader.readLine()));
             aliasB = stripQuotes(stripData(reader.readLine()));
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println("HttpdConfig --> IOException: " + e);
         }
     }
 
