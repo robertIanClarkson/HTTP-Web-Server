@@ -29,6 +29,10 @@ public class MimeConfig {
         }
     }
 
+    public HashMap<String, String> getMimeTypes() {
+        return mimeTypes;
+    }
+
     private String getType(String line) {
         return line.substring(0, line.indexOf("\t"));
     }
