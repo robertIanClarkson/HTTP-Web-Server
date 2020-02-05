@@ -6,15 +6,17 @@ public class WebServer {
     public static final int DEFAULT_PORT = 8096;
 
     public static void main(String[] args) throws IOException {
-        ServerSocket socket = new ServerSocket( DEFAULT_PORT );
-        Socket client = null;
+        Configuration config = new Configuration("conf/httpd.conf");
 
-        while( true ) {
-            client = socket.accept();
-            outputRequest( client );
-            sendResponse( client );
-            client.close();
-        }
+//        ServerSocket socket = new ServerSocket( DEFAULT_PORT );
+//        Socket client = null;
+//
+//        while( true ) {
+//            client = socket.accept();
+//            outputRequest( client );
+//            sendResponse( client );
+//            client.close();
+//        }
     }
 
     protected static void outputRequest( Socket client ) throws IOException {
