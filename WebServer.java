@@ -1,3 +1,5 @@
+import request.Request;
+
 import java.net.*;
 import java.io.*;
 
@@ -8,15 +10,17 @@ public class WebServer {
     public static void main(String[] args) throws IOException {
         Configuration config = new Configuration("conf/httpd.conf", "conf/mime.types");
 
-//        ServerSocket socket = new ServerSocket( DEFAULT_PORT );
-//        Socket client = null;
-//
-//        while( true ) {
-//            client = socket.accept();
-//            outputRequest( client );
+        ServerSocket socket = new ServerSocket( config.getHttpd().getListen() );
+        Socket client = null;
+
+        while( true ) {
+            client = socket.accept();
+
+            Request request = new Request(client);
+            outputRequest( client );
 //            sendResponse( client );
-//            client.close();
-//        }
+            client.close();
+        }
     }
 
     protected static void outputRequest( Socket client ) throws IOException {
