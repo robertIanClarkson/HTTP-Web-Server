@@ -31,8 +31,8 @@ public class MimeConfig {
         }
     }
 
-    public HashMap<String, String> getMimeTypes() {
-        return mimeTypes;
+    public String getMimeType(String extension) {
+        return mimeTypes.get(extension);
     }
 
     private String getType(String line) {
