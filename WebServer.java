@@ -13,14 +13,14 @@ public class WebServer {
         ServerSocket socket = new ServerSocket( config.getHttpd().getListen() );
         Socket client = null;
 
-        while( true ) {
+//        while( true ) {
             client = socket.accept();
-
+//            outputRequest( client );
             Request request = new Request(client);
-            outputRequest( client );
+
 //            sendResponse( client );
             client.close();
-        }
+//        }
     }
 
     protected static void outputRequest( Socket client ) throws IOException {
@@ -35,7 +35,7 @@ public class WebServer {
             System.out.println( "> " + line );
 
             // Why do we need to do this?
-            if( line.contains( "END" ) ) {
+            if( line.equals("") ) {
                 break;
             }
         }
