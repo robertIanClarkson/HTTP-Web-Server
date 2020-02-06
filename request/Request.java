@@ -7,31 +7,46 @@ import java.net.Socket;
 
 public class Request {
 
+    private BufferedReader reader;
+
     private Method method;
     private Identifier id;
     private Version version;
     private Headers headers;
     private Body body;
 
+    private boolean methodSet;
+
     public Request(Socket client) throws IOException {
-        BufferedReader reader = new BufferedReader(
+        String line;
+        methodSet = false;
+        reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
         );
+//        while(!(line = reader.readLine()).equals("")) {
+//            System.out.println("> " + line);
+//            process(line);
+//        }
         process(reader.readLine());
+        if (methodSet) {
+            headers = new Headers(reader);
+            if (headers.hasBody()) {
+                System.out.println("Has Body");
+            }
+        }
     }
 
-    private void process(String line) {
+    private void process(String line) throws IOException{
         if (isMethod(line)) {
             String[] chunks = line.split(" ");
             if (chunks.length == 3) {
                 method = new Method(chunks[0]);
                 id = new Identifier(chunks[1]);
                 version = new Version(chunks[2]);
+                methodSet = true;
+            } else {
+                throw new IOException("Request Method Syntax");
             }
-        } else if (isHeaders(line)) {
-//            headers = new Headers();
-        } else { //is body?
-//            body = new Body();
         }
     }
 
