@@ -1,3 +1,5 @@
+package configuration;
+
 public class Configuration {
 
     private HttpdConfig httpd;

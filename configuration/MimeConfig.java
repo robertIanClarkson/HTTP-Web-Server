@@ -1,3 +1,5 @@
+package configuration;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -25,7 +27,7 @@ public class MimeConfig {
                 }
             }
         } catch (IOException e) {
-            System.out.println("MimeConfig --> IOException: " + e);
+            System.out.println("configuration.MimeConfig --> IOException: " + e);
         }
     }
 

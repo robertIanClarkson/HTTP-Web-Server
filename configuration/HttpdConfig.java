@@ -1,3 +1,5 @@
+package configuration;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,7 +21,7 @@ public class HttpdConfig {
             aliasA = stripQuotes(stripData(reader.readLine()));
             aliasB = stripQuotes(stripData(reader.readLine()));
         } catch (IOException e) {
-            System.out.println("HttpdConfig --> IOException: " + e);
+            System.out.println("configuration.HttpdConfig --> IOException: " + e);
         }
     }
 
