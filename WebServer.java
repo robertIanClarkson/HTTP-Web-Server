@@ -17,7 +17,7 @@ public class WebServer {
 //        while( true ) {
             client = socket.accept();
 //            outputRequest( client );
-            Request request = new Request(client);
+            Request request = new Request(client, config);
 
 //            sendResponse( client );
             client.close();
