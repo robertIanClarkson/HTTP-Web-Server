@@ -59,10 +59,6 @@ public class Request {
                 line.contains("PATCH"));
     }
 
-    private void setBody(Header contentLength) {
-
-    }
-
     public Method getMethod() {
         return method;
     }
