@@ -10,32 +10,25 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class Request {
-
     private BufferedReader reader;
-
     private Method method;
     private Identifier id;
     private Version version;
     private Headers headers;
     private Body body;
-
     private boolean methodSet;
-
     public Request(Socket client, Configuration config) throws IOException {
         String line;
         methodSet = false;
         reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
         );
-//        while(!(line = reader.readLine()).equals("")) {
-//            System.out.println("> " + line);
-//            process(line);
-//        }
         process(reader.readLine());
         if (methodSet) {
             headers = new Headers(reader, config);
             if (headers.hasBody()) {
                 System.out.println("Has Body");
+                body = new Body(client, headers.getHeader("Content-Length"));
             }
         }
     }
@@ -66,17 +59,8 @@ public class Request {
                 line.contains("PATCH"));
     }
 
-//    private boolean isIdentifier(String line) {
-//        return true;
-//    }
-//
-//    private boolean isVersion(String line) {
-//        return (line.contains() ||
-//                line.contains);
-//    }
+    private void setBody(Header contentLength) {
 
-    private boolean isHeaders(String line) {
-        return true;
     }
 
     public Method getMethod() {
