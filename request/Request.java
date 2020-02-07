@@ -1,9 +1,13 @@
 package request;
 
+import configuration.Configuration;
+import configuration.headers.Header;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Request {
 
@@ -17,7 +21,7 @@ public class Request {
 
     private boolean methodSet;
 
-    public Request(Socket client) throws IOException {
+    public Request(Socket client, Configuration config) throws IOException {
         String line;
         methodSet = false;
         reader = new BufferedReader(
@@ -29,7 +33,7 @@ public class Request {
 //        }
         process(reader.readLine());
         if (methodSet) {
-            headers = new Headers(reader);
+            headers = new Headers(reader, config);
             if (headers.hasBody()) {
                 System.out.println("Has Body");
             }
