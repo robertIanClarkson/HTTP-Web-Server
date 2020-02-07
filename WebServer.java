@@ -1,5 +1,6 @@
 import configuration.Configuration;
 import request.Request;
+import response.Response;
 
 import java.net.*;
 import java.io.*;
@@ -18,7 +19,7 @@ public class WebServer {
             client = socket.accept();
 //            outputRequest( client );
             Request request = new Request(client, config);
-
+            Response response = new Response(client, config, request);
 //            sendResponse( client );
             client.close();
 //        }
