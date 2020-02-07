@@ -31,6 +31,7 @@ public class Configuration {
 
     private void initializeHeaders() {
         headers.put("Host", new Host());
+        headers.put("Content-Length", new ContentLength());
         headers.put("Connection", new Connection());
         headers.put("Cache-Control", new CacheControl());
         headers.put("DNT", new DNT());
