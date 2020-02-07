@@ -1,13 +1,13 @@
 package request;
 
 import configuration.Configuration;
-import configuration.headers.Header;
+import configuration.headers.ContentLength;
+import configuration.headers.Host;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.HashMap;
 
 public class Request {
     private BufferedReader reader;
@@ -27,8 +27,8 @@ public class Request {
         if (methodSet) {
             headers = new Headers(reader, config);
             if (headers.hasBody()) {
-                System.out.println("Has Body");
-                body = new Body(client, headers.getHeader("Content-Length"));
+                ContentLength length = (ContentLength) headers.getHeader("Content-Length");
+                body = new Body(client, length);
             }
         }
     }
