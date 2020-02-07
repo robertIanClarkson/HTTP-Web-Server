@@ -13,6 +13,7 @@ public class Headers {
         String[] chunks;
         headers = new HashMap<>();
         while(!(line = reader.readLine()).equals("")) {
+            System.out.println("> " + line);
             chunks = line.split(": ");
             headers.put(chunks[0], chunks[1]);
         }
