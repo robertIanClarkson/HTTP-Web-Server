@@ -15,14 +15,45 @@ public class WebServer {
         ServerSocket socket = new ServerSocket( config.getHttpd().getListen() );
         Socket client = null;
 
-//        while( true ) {
+        while( true ) {
             client = socket.accept();
 //            outputRequest( client );
             Request request = new Request(client, config);
             Response response = new Response(client, config, request);
+            sendResponse(client, response);
 //            sendResponse( client );
             client.close();
-//        }
+        }
+    }
+
+    private static void sendResponse(Socket client, Response response) throws IOException {
+        PrintWriter out = new PrintWriter( client.getOutputStream(), true );
+//        out.printf("%s %s %s\n%s\r\n%s",
+//                response.getVersion(), response.getCode(), response.getPhrase(), response.getHeaders(), response.getBody());
+//        out.println("HTTP/1.1 200 OK\n" +
+//                "Date: Mon, 27 Jul 2009 12:28:53 GMT\n" +
+//                "Server: Apache/2.2.14 (Win32)\n" +
+//                "Last-Modified: Wed, 22 Jul 2009 19:15:56 GMT\n" +
+//                "Content-Length: 88\n" +
+//                "Content-Type: text/html\n" +
+//                "Connection: Closed\r\n" +
+//                "<html>\n" +
+//                "<body>\n" +
+//                "<h1>Hello, World!</h1>\n" +
+//                "</body>\n" +
+//                "</html");
+        out.println("HTTP/1.1 404 Not Found\n" +
+                "Date: Sun, 18 Oct 2012 10:36:20 GMT\n" +
+                "Server: Apache/2.2.14 (Win32)\n" +
+                "Content-Length: 21\n" +
+                "Connection: Closed\n" +
+                "Content-Type: text/html\r\n" +
+                "<h1>My Home Page</h1>");
+//        out.println("HTTP/1.1 404 Not Found\n" +
+//                "Date: Sun, 18 Oct 2012 10:36:20 GMT\n" +
+//                "Server: Apache/2.2.14 (Win32)\n" +
+//                "Connection: Closed\n");
+        outputLineBreak();
     }
 
     protected static void outputRequest( Socket client ) throws IOException {
