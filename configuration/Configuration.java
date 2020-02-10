@@ -43,6 +43,8 @@ public class Configuration {
         headers.put("Sec-Fetch-Mode", new SecFetchMode());
         headers.put("Accept-Encoding", new AcceptEncoding());
         headers.put("Accept-Language", new AcceptLanguage());
+        headers.put("Pragma", new Pragma());
+        headers.put("Referer", new Referer());
 //        headers.put("", new Header());
     }
 }
