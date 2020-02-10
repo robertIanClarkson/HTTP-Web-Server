@@ -34,6 +34,7 @@ public class Request {
     }
 
     private void process(String line) throws IOException{
+        System.out.println("> " + line);
         if (isMethod(line)) {
             String[] chunks = line.split(" ");
             if (chunks.length == 3) {
