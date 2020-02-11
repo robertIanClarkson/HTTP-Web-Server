@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class Request {
+
     private BufferedReader reader;
     private Method method;
     private Identifier id;
@@ -15,15 +16,16 @@ public class Request {
     private Headers headers;
     private Body body;
     private boolean methodSet;
-    public Request(Socket client, Configuration config) throws IOException {
-        String line, length;
+
+    public Request(Socket client) throws IOException {
+        String length;
         methodSet = false;
         reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
         );
         process(reader.readLine());
         if (methodSet) {
-            headers = new Headers(reader, config);
+            headers = new Headers(reader);
             if (headers.hasBody()) {
                 length = headers.getHeader("Content-Length").getValue();
                 body = new Body(reader, Integer.parseInt(length));

@@ -17,7 +17,7 @@ public class Response {
     private Headers headers;
     private Body body;
 
-    public Response(Socket client, Configuration config, Request request) {
+    public Response(Socket client, Request request) {
         version = request.getVersion();
         code = new StatusCode("200");
         phrase = new Phrase("OK");

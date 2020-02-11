@@ -15,7 +15,7 @@ public class Headers {
         headers = new HashMap<>();
     }
 
-    public Headers(BufferedReader reader, Configuration config) throws IOException {
+    public Headers(BufferedReader reader) throws IOException {
         Header header;
         String line, key, value;
         String[] data;

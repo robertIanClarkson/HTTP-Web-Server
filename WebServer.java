@@ -10,17 +10,17 @@ public class WebServer {
     public static final int DEFAULT_PORT = 8096;
 
     public static void main(String[] args) throws IOException {
-        Configuration config = new Configuration("conf/httpd.conf", "conf/mime.types");
+        new Configuration("conf/httpd.conf", "conf/mime.types");
 
-        ServerSocket socket = new ServerSocket( config.getHttpd().getListen() );
+        ServerSocket socket = new ServerSocket( Configuration.getHttpd().getListen() );
         Socket client = null;
 
 //        while( true ) {
             client = socket.accept();
 //            outputRequest( client );
             System.out.println( "------------Request-------------" );
-            Request request = new Request(client, config);
-            Response response = new Response(client, config, request);
+            Request request = new Request(client);
+            Response response = new Response(client, request);
             sendResponse(client, response);
 //            sendResponse( client );
             client.close();

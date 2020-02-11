@@ -4,19 +4,19 @@ import java.io.IOException;
 
 public class Configuration {
 
-    private HttpdConfig httpd;
-    private MimeConfig mime;
+    private static HttpdConfig httpd;
+    private static MimeConfig mime;
 
     public Configuration(String httpdFile, String mimeFile) throws IOException {
         httpd = new HttpdConfig(httpdFile);
         mime = new MimeConfig(mimeFile);
     }
 
-    public HttpdConfig getHttpd() {
+    public static HttpdConfig getHttpd() {
         return httpd;
     }
 
-    public MimeConfig getMime() {
+    public static MimeConfig getMime() {
         return mime;
     }
 }
