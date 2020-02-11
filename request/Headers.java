@@ -41,4 +41,14 @@ public class Headers {
     public void addHeader(String key, Header value) {
         headers.put(key, value);
     }
+
+    @Override
+    public String toString() {
+        String format = "";
+        for(String key : headers.keySet()) {
+            format += key + ": " + headers.get(key) + "\r\n";
+        }
+        System.out.println(format);
+        return format;
+    }
 }

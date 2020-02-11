@@ -6,6 +6,9 @@ import java.net.Socket;
 
 public class Body {
 
+    private Byte[] body;
+
     public Body(BufferedReader reader, int length) {
     }
+
 }

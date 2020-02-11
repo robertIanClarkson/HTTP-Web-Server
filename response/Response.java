@@ -52,4 +52,15 @@ public class Response {
     public Body getBody() {
         return body;
     }
+
+    @Override
+    public String toString() {
+        String response = "";
+        response += version;
+        response += code;
+        response += phrase;
+        response += headers;
+//        response += body;
+        return response;
+    }
 }

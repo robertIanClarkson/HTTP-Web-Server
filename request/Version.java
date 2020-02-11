@@ -11,4 +11,9 @@ public class Version {
     public String getVersion() {
         return version;
     }
+
+    @Override
+    public String toString() {
+        return version + " ";
+    }
 }

@@ -9,6 +9,11 @@ public class Header {
     }
 
     public String getValue() {
-        return this.value;
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 }
