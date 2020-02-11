@@ -8,7 +8,14 @@ public class Body {
 
     private Byte[] body;
 
+    public Body() {
+    }
+
     public Body(BufferedReader reader, int length) {
     }
 
+    @Override
+    public String toString() {
+        return "\r\nbody";
+    }
 }

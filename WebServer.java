@@ -15,25 +15,29 @@ public class WebServer {
         ServerSocket socket = new ServerSocket( config.getHttpd().getListen() );
         Socket client = null;
 
-        while( true ) {
+//        while( true ) {
             client = socket.accept();
 //            outputRequest( client );
+            System.out.println( "------------Request-------------" );
             Request request = new Request(client, config);
             Response response = new Response(client, config, request);
             sendResponse(client, response);
 //            sendResponse( client );
             client.close();
-        }
+//        }
     }
 
     private static void sendResponse(Socket client, Response response) throws IOException {
         PrintWriter out = new PrintWriter( client.getOutputStream(), true );
         out.print(response);
+        System.out.println( "------------Response-------------" );
+        System.out.print(response);
+        System.out.print( "\n------------END-------------" );
 //        out.println("HTTP/1.1 200 OK\r\n" +
 //                "Content-Length: 11\r\n" +
 //                "Content-Type: text/plain\r\n\r\n" +
 //                "Hello World");
-        outputLineBreak();
+//        outputLineBreak();
     }
 
     protected static void outputRequest( Socket client ) throws IOException {

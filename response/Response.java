@@ -18,9 +18,15 @@ public class Response {
     private Body body;
 
     public Response(Socket client, Configuration config, Request request) {
+        version = request.getVersion();
+        code = new StatusCode("200");
+        phrase = new Phrase("OK");
+
         headers = new Headers();
         headers.addHeader("Date", new Header(getServerTime()));
         headers.addHeader("Server", new Header("Clarkson_&_Gao_Server"));
+
+        body = new Body();
     }
 
     private String getServerTime() { //https://stackoverflow.com/questions/7707555/getting-date-in-http-format-in-java
@@ -60,7 +66,7 @@ public class Response {
         response += code;
         response += phrase;
         response += headers;
-//        response += body;
+        response += body;
         return response;
     }
 }

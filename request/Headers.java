@@ -48,7 +48,6 @@ public class Headers {
         for(String key : headers.keySet()) {
             format += key + ": " + headers.get(key) + "\r\n";
         }
-        System.out.println(format);
         return format;
     }
 }
