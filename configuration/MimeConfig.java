@@ -1,6 +1,7 @@
 package configuration;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -9,25 +10,21 @@ public class MimeConfig {
 
     private HashMap<String, String> mimeTypes;
 
-    MimeConfig(String fileName) {
+    MimeConfig(String fileName) throws IOException {
         BufferedReader reader;
         String line;
         String type;
         String[] extensions;
         mimeTypes = new HashMap<>();
-        try {
-            reader = new BufferedReader(new FileReader(fileName));
-            while ((line = reader.readLine()) != null) {
-                if ((!line.contains("#")) && (line.length() != 0) && (line.contains("\t"))) {
-                    type = getType(line);
-                    extensions = getExtensions(line);
-                    for (String extension : extensions) {
-                        mimeTypes.put(extension, type);
-                    }
+        reader = new BufferedReader(new FileReader(fileName));
+        while ((line = reader.readLine()) != null) {
+            if ((!line.contains("#")) && (line.length() != 0) && (line.contains("\t"))) {
+                type = getType(line);
+                extensions = getExtensions(line);
+                for (String extension : extensions) {
+                    mimeTypes.put(extension, type);
                 }
             }
-        } catch (IOException e) {
-            System.out.println("configuration.MimeConfig --> IOException: " + e);
         }
     }
 
