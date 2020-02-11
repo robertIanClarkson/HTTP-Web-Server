@@ -1,8 +1,6 @@
 package request;
 
 import configuration.Configuration;
-import configuration.headers.ContentLength;
-import configuration.headers.Host;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +16,7 @@ public class Request {
     private Body body;
     private boolean methodSet;
     public Request(Socket client, Configuration config) throws IOException {
-        String line;
+        String line, length;
         methodSet = false;
         reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
@@ -27,8 +25,8 @@ public class Request {
         if (methodSet) {
             headers = new Headers(reader, config);
             if (headers.hasBody()) {
-                ContentLength length = (ContentLength) headers.getHeader("Content-Length");
-                body = new Body(client, length);
+                length = headers.getHeader("Content-Length").getValue();
+                body = new Body(reader, Integer.parseInt(length));
             }
         }
     }

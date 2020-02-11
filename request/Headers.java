@@ -1,28 +1,32 @@
 package request;
 
 import configuration.Configuration;
-import configuration.headers.Header;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+
 public class Headers {
 
     private HashMap<String, Header> headers;
 
+    public Headers() {
+        headers = new HashMap<>();
+    }
+
     public Headers(BufferedReader reader, Configuration config) throws IOException {
         Header header;
-        String line;
-        String[] chunks;
+        String line, key, value;
+        String[] data;
         headers = new HashMap<>();
         while(!(line = reader.readLine()).equals("")) {
             System.out.println("> " + line);
-            chunks = line.split(": ");
-            header = config.getHeader(chunks[0]);
-            header.init(chunks[1]);
-            headers.put(chunks[0], header);
-//            headers.put(chunks[0], config.getHeader(chunks[0]).init(chunks[1]));
+            data = line.split(": ");
+            key = data[0];
+            value = data[1];
+            header = new Header(value);
+            headers.put(key, header);
         }
     }
 
@@ -30,7 +34,11 @@ public class Headers {
         return headers.containsKey("Content-Length");
     }
 
-    public Header getHeader(String name) {
-        return headers.get(name);
+    public Header getHeader(String key) {
+        return headers.get(key);
+    }
+
+    public void addHeader(String key, Header value) {
+        headers.put(key, value);
     }
 }

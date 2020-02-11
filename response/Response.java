@@ -1,12 +1,7 @@
 package response;
 
 import configuration.Configuration;
-import configuration.headers.Date;
-import configuration.headers.Server;
-import request.Body;
-import request.Headers;
-import request.Request;
-import request.Version;
+import request.*;
 
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -23,11 +18,9 @@ public class Response {
     private Body body;
 
     public Response(Socket client, Configuration config, Request request) {
-        Date date = new Date();
-        date.init(getServerTime());
-        Server server = new Server();
-//        server.init();
-
+        headers = new Headers();
+        headers.addHeader("Date", new Header(getServerTime()));
+        headers.addHeader("Server", new Header("Clarkson_&_Gao_Server"));
     }
 
     private String getServerTime() { //https://stackoverflow.com/questions/7707555/getting-date-in-http-format-in-java

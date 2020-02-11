@@ -42,13 +42,10 @@ public class WebServer {
 //                "<h1>Hello, World!</h1>\n" +
 //                "</body>\n" +
 //                "</html");
-        out.println("HTTP/1.1 404 Not Found\n" +
-                "Date: Sun, 18 Oct 2012 10:36:20 GMT\n" +
-                "Server: Apache/2.2.14 (Win32)\n" +
-                "Content-Length: 21\n" +
-                "Connection: Closed\n" +
-                "Content-Type: text/html\r\n" +
-                "<h1>My Home Page</h1>");
+        out.println("HTTP/1.1 200 OK\r\n" +
+                "Content-Length: 11\r\n" +
+                "Content-Type: text/plain\r\n\r\n" +
+                "Hello World");
 //        out.println("HTTP/1.1 404 Not Found\n" +
 //                "Date: Sun, 18 Oct 2012 10:36:20 GMT\n" +
 //                "Server: Apache/2.2.14 (Win32)\n" +
