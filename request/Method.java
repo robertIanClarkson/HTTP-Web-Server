@@ -13,7 +13,6 @@ public class Method {
     private String verb;
 
     public Method(String verb) throws InvalidMethodException{
-        verb = "hello";
         if(VERBS.contains(verb)) {
             this.verb = verb;
         } else {
