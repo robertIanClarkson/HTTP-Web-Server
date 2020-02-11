@@ -1,11 +1,24 @@
 package request;
 
+import request.exceptions.InvalidVersionException;
+
+import java.util.Arrays;
+import java.util.List;
+
 public class Version {
+
+    private static List<String> VERSIONS = Arrays.asList(
+            "HTTP/1.1"
+    );
 
     private String version;
 
-    public Version(String version) {
-        this.version = version;
+    public Version(String version) throws InvalidVersionException {
+        if(VERSIONS.contains(version)) {
+            this.version = version;
+        } else {
+            throw new InvalidVersionException("\"" + version + "\" is not a valid version of HTTP");
+        }
     }
 
     public String getVersion() {
