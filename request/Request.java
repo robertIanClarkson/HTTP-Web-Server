@@ -1,11 +1,12 @@
 package request;
 
-import configuration.Configuration;
+import request.exceptions.RequestException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.rmi.RemoteException;
 
 public class Request {
 
@@ -17,7 +18,7 @@ public class Request {
     private Body body;
     private boolean methodSet;
 
-    public Request(Socket client) throws IOException {
+    public Request(Socket client) throws IOException, RequestException {
         String length;
         methodSet = false;
         reader = new BufferedReader(
@@ -33,7 +34,7 @@ public class Request {
         }
     }
 
-    private void process(String line) throws IOException{
+    private void process(String line) throws IOException, RequestException {
         System.out.println("> " + line);
         if (isMethod(line)) {
             String[] chunks = line.split(" ");
