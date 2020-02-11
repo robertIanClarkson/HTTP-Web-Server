@@ -2,6 +2,7 @@ package configuration;
 
 import configuration.headers.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class Configuration {
@@ -10,7 +11,7 @@ public class Configuration {
     private MimeConfig mime;
     private HashMap<String, Header> headers;
 
-    public Configuration(String httpdFile, String mimeFile) {
+    public Configuration(String httpdFile, String mimeFile) throws IOException {
         httpd = new HttpdConfig(httpdFile);
         mime = new MimeConfig(mimeFile);
         headers = new HashMap<>();
