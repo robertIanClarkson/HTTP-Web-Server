@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class HttpdConfig {
 
-    private String serverRoot, documentRoot, logFile, scriptAlias, aliasA, aliasB;
+    private String serverRoot, documentRoot, directoryIndex, logFile, scriptAlias, aliasA, aliasB;
     private int listen;
 
     HttpdConfig( String fileName ) {
@@ -15,6 +15,7 @@ public class HttpdConfig {
             reader = new BufferedReader(new FileReader( fileName ));
             serverRoot = stripQuotes(stripData(reader.readLine()));
             documentRoot = stripQuotes(stripData(reader.readLine()));
+            directoryIndex = stripQuotes(stripData(reader.readLine()));
             listen = Integer.parseInt(stripData(reader.readLine()));
             logFile = stripQuotes(stripData(reader.readLine()));
             scriptAlias = stripQuotes(stripData(reader.readLine()));
@@ -31,6 +32,10 @@ public class HttpdConfig {
 
     public String getDocumentRoot() {
         return documentRoot;
+    }
+
+    public String getDirectoryIndex() {
+        return directoryIndex;
     }
 
     public int getListen() {
