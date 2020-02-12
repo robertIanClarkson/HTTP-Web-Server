@@ -16,36 +16,29 @@ public class Request {
     private Version version;
     private Headers headers;
     private Body body;
-    private boolean methodSet;
 
     public Request(Socket client) throws IOException, RequestException {
         String length;
-        methodSet = false;
         reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
         );
         process(reader.readLine());
-        if (methodSet) {
-            headers = new Headers(reader);
-            if (headers.hasBody()) {
-                length = headers.getHeader("Content-Length").getValue();
-                body = new Body(reader, Integer.parseInt(length));
-            }
+        headers = new Headers(reader);
+        if (headers.hasBody()) {
+            length = headers.getHeader("Content-Length").getValue();
+            body = new Body(reader, Integer.parseInt(length));
         }
     }
 
-    private void process(String line) throws IOException, RequestException {
+    private void process(String line) throws RequestException {
         System.out.println("> " + line);
-        if (isMethod(line)) {
-            String[] chunks = line.split(" ");
-            if (chunks.length == 3) {
-                method = new Method(chunks[0]);
-                id = new Identifier(chunks[1]);
-                version = new Version(chunks[2]);
-                methodSet = true;
-            } else {
-                throw new IOException("Request Method Syntax");
-            }
+        String[] chunks = line.split(" ");
+        if(chunks.length == 3) {
+            method = new Method(chunks[0]);
+            id = new Identifier(chunks[1]);
+            version = new Version(chunks[2]);
+        } else {
+            throw new RequestException("Invalid HTTP Syntax");
         }
     }
 
