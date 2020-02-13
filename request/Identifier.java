@@ -1,5 +1,6 @@
 package request;
 
+import configuration.ConfigError;
 import configuration.Configuration;
 import request.exceptions.InvalidIdentifierException;
 
@@ -10,7 +11,7 @@ public class Identifier {
 
     private String id;
 
-    public Identifier(String id) throws InvalidIdentifierException {
+    public Identifier(String id) throws InvalidIdentifierException, ConfigError {
 //        id = resolveAlias(id);
         if(Configuration.getHttpd().isAlias(id)) {
             id = Configuration.getHttpd().getAlias(id);

@@ -1,5 +1,6 @@
 package request;
 
+import configuration.ConfigError;
 import request.exceptions.RequestException;
 
 import java.io.BufferedReader;
@@ -17,7 +18,7 @@ public class Request {
     private Headers headers;
     private Body body;
 
-    public Request(Socket client) throws IOException, RequestException {
+    public Request(Socket client) throws IOException, RequestException, ConfigError {
         String length;
         reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
@@ -30,7 +31,7 @@ public class Request {
         }
     }
 
-    private void process(String line) throws RequestException {
+    private void process(String line) throws RequestException, ConfigError {
         System.out.println("> " + line);
         String[] chunks = line.split(" ");
         if(chunks.length == 3) {

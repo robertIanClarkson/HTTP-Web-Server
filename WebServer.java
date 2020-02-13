@@ -1,3 +1,4 @@
+import configuration.ConfigError;
 import configuration.Configuration;
 import request.Request;
 import request.exceptions.RequestException;
@@ -11,7 +12,7 @@ public class WebServer {
 
     public static final int DEFAULT_PORT = 8096;
 
-    public static void main(String[] args) throws IOException, RequestException, ResponseErrorException {
+    public static void main(String[] args) throws IOException, ConfigError, RequestException, ResponseErrorException {
         new Configuration("conf/httpd.conf", "conf/mime.types");
 
         ServerSocket socket = new ServerSocket( Configuration.getHttpd().getListen() );
