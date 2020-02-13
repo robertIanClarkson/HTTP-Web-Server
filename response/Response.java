@@ -2,6 +2,7 @@ package response;
 
 import configuration.Configuration;
 import request.*;
+import response.exception.ResponseErrorException;
 
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -17,7 +18,7 @@ public class Response {
     private Headers headers;
     private Body body;
 
-    public Response(Socket client, Request request) {
+    public Response(Socket client, Request request) throws ResponseErrorException {
         version = request.getVersion();
         code = new StatusCode("200");
         phrase = new Phrase("OK");
