@@ -3,9 +3,11 @@ package configuration;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class HttpdConfig {
 
+    private HashMap<String, String> alias = new HashMap<>();
     private String serverRoot, documentRoot, directoryIndex, logFile, scriptAlias, aliasA, aliasB;
     private int listen;
 
@@ -50,12 +52,12 @@ public class HttpdConfig {
         return scriptAlias;
     }
 
-    public String getAliasA() {
-        return aliasA;
+    public boolean isAlias(String key) {
+        return alias.containsKey(key);
     }
 
-    public String getAliasB() {
-        return aliasB;
+    public String getAlias(String key) {
+        return alias.get(key);
     }
 
     private String stripQuotes(String line ) {
