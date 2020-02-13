@@ -2,6 +2,7 @@ import configuration.Configuration;
 import request.Request;
 import request.exceptions.RequestException;
 import response.Response;
+import response.exception.ResponseErrorException;
 
 import java.net.*;
 import java.io.*;
@@ -10,7 +11,7 @@ public class WebServer {
 
     public static final int DEFAULT_PORT = 8096;
 
-    public static void main(String[] args) throws IOException, RequestException {
+    public static void main(String[] args) throws IOException, RequestException, ResponseErrorException {
         new Configuration("conf/httpd.conf", "conf/mime.types");
 
         ServerSocket socket = new ServerSocket( Configuration.getHttpd().getListen() );

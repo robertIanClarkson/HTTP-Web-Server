@@ -11,7 +11,13 @@ public class Identifier {
     private String id;
 
     public Identifier(String id) throws InvalidIdentifierException {
-        this.id = Configuration.getHttpd().getDocumentRoot() + id.substring(1);
+//        id = resolveAlias(id);
+        if(Configuration.getHttpd().isAlias(id)) {
+            id = Configuration.getHttpd().getAlias(id);
+        } else {
+            this.id = Configuration.getHttpd().getDocumentRoot() + id.substring(1);
+        }
+
         if(this.id.equals(Configuration.getHttpd().getDocumentRoot())) {
             /* if no file is given then give index.html */
             this.id = Configuration.getHttpd().getDirectoryIndex();
