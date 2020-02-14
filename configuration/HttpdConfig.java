@@ -42,8 +42,8 @@ public class HttpdConfig {
         return scriptAlias;
     }
 
-    public boolean isAlias(String key) {
-        return lines.isAlias(key);
+    public boolean isAlias(String id) {
+        return lines.isAlias(id);
     }
 
     public String getAlias(String key) throws ConfigError {

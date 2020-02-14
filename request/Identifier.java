@@ -14,15 +14,17 @@ public class Identifier {
     public Identifier(String id) throws InvalidIdentifierException, ConfigError {
 //        id = resolveAlias(id);
         if(Configuration.getHttpd().isAlias(id)) {
-            id = Configuration.getHttpd().getAlias(id);
+            this.id = Configuration.getHttpd().getAlias(id);
         } else {
             this.id = Configuration.getHttpd().getDocumentRoot() + id.substring(1);
         }
 
-        if(this.id.equals(Configuration.getHttpd().getDocumentRoot())) {
+        if(this.id.endsWith("/")) {
             /* if no file is given then give index.html */
-            this.id = Configuration.getHttpd().getDirectoryIndex();
-        } else if(Files.notExists(Paths.get(this.id))){
+            this.id += Configuration.getHttpd().getDirectoryIndex();
+        }
+
+        if(Files.notExists(Paths.get(this.id))){
             throw new InvalidIdentifierException("File \"" + id + "\" does not exist");
         }
     }

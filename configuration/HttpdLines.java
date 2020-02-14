@@ -1,5 +1,6 @@
 package configuration;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -32,16 +33,26 @@ public class HttpdLines {
         }
     }
 
-    public boolean isAlias(String key) {
-        return alias.containsKey(key);
+    public boolean isAlias(String id) {
+        for (String currentkey : alias.keySet()) {
+            if(id.contains(currentkey)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public String getAlias(String key) throws ConfigError{
-        if(alias.containsKey(key)) {
-            return alias.get(key);
-        } else {
-            throw new ConfigError("Alias \"" + key + "\" is not found");
+    public String getAlias(String id) {
+        String key, value, resolvedID = "";
+        for(String currentKey : alias.keySet()) {
+            if(id.contains(currentKey)) {
+                key = currentKey;
+                value = alias.get(key);
+                resolvedID = value + id.substring(id.lastIndexOf(key)+key.length());
+                break;
+            }
         }
+        return resolvedID;
     }
 
     private String stripQuotes(String line) {
