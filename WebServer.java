@@ -7,6 +7,7 @@ import response.exception.ResponseErrorException;
 
 import java.net.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class WebServer {
 
@@ -18,62 +19,36 @@ public class WebServer {
         ServerSocket socket = new ServerSocket( Configuration.getHttpd().getListen() );
         Socket client = null;
 
-//        while( true ) {
-            client = socket.accept();
-//            outputRequest( client );
-            System.out.println( "------------Request-------------" );
-            Request request = new Request(client);
-            Response response = new Response(client, request);
-            sendResponse(client, response);
-//            sendResponse( client );
-            client.close();
-//        }
+        while( true ) {
+            try {
+                client = socket.accept();
+                System.out.println("------------Request-------------");
+                Request request = new Request(client);
+                Response response = new Response(client, request);
+                sendResponse(client, response);
+                printDebug(response);
+                client.close();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
     }
 
     private static void sendResponse(Socket client, Response response) throws IOException {
-        PrintWriter out = new PrintWriter( client.getOutputStream(), true );
-        out.print(response);
-        System.out.println( "------------Response-------------" );
-        System.out.print(response);
-        System.out.print( "\n------------END-------------" );
-//        out.println("HTTP/1.1 200 OK\r\n" +
-//                "Content-Length: 11\r\n" +
-//                "Content-Type: text/plain\r\n\r\n" +
-//                "Hello World");
-//        outputLineBreak();
+        /* https://stackoverflow.com/questions/1176135/socket-send-and-receive-byte-array */
+        DataOutputStream dOut = new DataOutputStream(client.getOutputStream());
+        int length = response.toString().length() + Integer.parseInt(response.getBody().getLength());
+        byte[] res = response.toString().getBytes();
+        dOut.writeInt(length); // write length of the message
+        dOut.write(res);
+        dOut.write(response.getBody().getBody());
     }
 
-    protected static void outputRequest( Socket client ) throws IOException {
-        String line;
-
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader( client.getInputStream() )
-        );
-
-        while( true ) {
-            line = reader.readLine();
-            System.out.println( "> " + line );
-
-            // Why do we need to do this?
-            if( line.equals("") ) {
-                break;
-            }
-        }
-        outputLineBreak();
-    }
-
-    protected static void outputLineBreak() {
-        System.out.println( "-------------------------" );
-    }
-
-    protected static void sendResponse( Socket client ) throws IOException {
-        PrintWriter out = new PrintWriter( client.getOutputStream(), true );
-        int gift = (int) Math.ceil( Math.random() * 100 );
-        String response = "Gee, thanks, this is for you: " + gift;
-
-        out.println( response );
-
-        outputLineBreak();
-        System.out.println( "I sent: " + response );
+    private static void printDebug(Response response) {
+        System.out.println("------------Response------------");
+        System.out.println(response);
+        String body = new String(response.getBody().getBody(), StandardCharsets.US_ASCII);
+//        System.out.println(body);
+        System.out.println("------------END------------");
     }
 }

@@ -4,6 +4,7 @@ import configuration.Configuration;
 import request.*;
 import response.exception.ResponseErrorException;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,7 +19,7 @@ public class Response {
     private Headers headers;
     private Body body;
 
-    public Response(Socket client, Request request) throws ResponseErrorException {
+    public Response(Socket client, Request request) throws ResponseErrorException, IOException {
         version = request.getVersion();
         code = request.getCode();
         phrase = new Phrase(handlePhrase(code));
@@ -43,7 +44,7 @@ public class Response {
 //        body = new Body();
     }
 
-    private void handleGETRequest(Request request) {
+    private void handleGETRequest(Request request) throws IOException {
         headers.addHeader("Connection", new Header("close"));
         headers.addHeader("WWW-Authenticate", new Header("Basic"));
 
@@ -54,7 +55,7 @@ public class Response {
 
         body = new Body(request.getId().getURI());
 
-//        headers.addHeader("Content-Length", new Header(body.getLength()));
+        headers.addHeader("Content-Length", new Header(body.getLength()));
     }
 
     private String handlePhrase(StatusCode code) {
@@ -103,10 +104,10 @@ public class Response {
 
     private String getServerTime() { //https://stackoverflow.com/questions/7707555/getting-date-in-http-format-in-java
         Calendar calendar = Calendar.getInstance();
-//        SimpleDateFormat dateFormat = new SimpleDateFormat(
-//                "EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "EEE, dd MMM yyyy HH:mm:ss", Locale.US);
+                "EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+//        SimpleDateFormat dateFormat = new SimpleDateFormat(
+//                "EEE, dd MMM yyyy HH:mm:ss", Locale.US);
         dateFormat.setTimeZone(TimeZone.getTimeZone("PST"));
         return dateFormat.format(calendar.getTime());
     }
@@ -138,7 +139,7 @@ public class Response {
         response += code;
         response += phrase;
         response += headers;
-        response += body;
+//        response += body;
         return response;
     }
 }
