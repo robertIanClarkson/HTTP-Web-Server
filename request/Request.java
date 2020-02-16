@@ -2,6 +2,7 @@ package request;
 
 import configuration.ConfigError;
 import request.exceptions.RequestException;
+import response.StatusCode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,16 +19,19 @@ public class Request {
     private Headers headers;
     private Body body;
 
+    public static StatusCode code;
+
     public Request(Socket client) throws IOException, RequestException, ConfigError {
-        String length;
+        String bodyLength;
         reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
         );
+        code = new StatusCode("200");
         process(reader.readLine());
         headers = new Headers(reader);
         if (headers.hasBody()) {
-            length = headers.getHeader("Content-Length").getValue();
-            body = new Body(reader, Integer.parseInt(length));
+            bodyLength = headers.getHeader("Content-Length").getValue();
+            body = new Body(reader, Integer.parseInt(bodyLength));
         }
     }
 
@@ -39,7 +43,8 @@ public class Request {
             id = new Identifier(chunks[1]);
             version = new Version(chunks[2]);
         } else {
-            throw new RequestException("Invalid HTTP Syntax");
+            code = new StatusCode("400");
+//            throw new RequestException("Invalid HTTP Syntax");
         }
     }
 
@@ -73,6 +78,10 @@ public class Request {
 
     public Body getBody() {
         return body;
+    }
+
+    public StatusCode getCode() {
+        return code;
     }
 }
 

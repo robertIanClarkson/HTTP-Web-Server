@@ -2,6 +2,7 @@ package request;
 
 import configuration.Configuration;
 import request.exceptions.InvalidHeaderException;
+import response.StatusCode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,7 +38,8 @@ public class Headers {
             if(HEADERS.contains(key)) {
                 headers.put(key, header);
             } else {
-                throw new InvalidHeaderException("\"" + key + "\" is not a valid Header");
+                Request.code = new StatusCode("400");
+//                throw new InvalidHeaderException("\"" + key + "\" is not a valid Header");
             }
         }
     }

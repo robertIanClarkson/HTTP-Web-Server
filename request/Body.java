@@ -11,7 +11,11 @@ public class Body {
     public Body() {
     }
 
-    public Body(BufferedReader reader, int length) {
+    public Body(BufferedReader reader, int length) throws IOException {
+        String line = "";
+        while((line = reader.readLine()) != null) {
+            System.out.println(line);
+        }
     }
 
     @Override

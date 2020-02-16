@@ -3,6 +3,7 @@ package request;
 import configuration.ConfigError;
 import configuration.Configuration;
 import request.exceptions.InvalidIdentifierException;
+import response.StatusCode;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,11 +26,12 @@ public class Identifier {
         }
 
         if(Files.notExists(Paths.get(this.id))){
-            throw new InvalidIdentifierException("File \"" + id + "\" does not exist");
+            Request.code = new StatusCode("404");
+//            throw new InvalidIdentifierException("File \"" + id + "\" does not exist");
         }
     }
 
-    public String getId() {
+    public String getURI() {
         return id;
     }
 }

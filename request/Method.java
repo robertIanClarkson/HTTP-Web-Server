@@ -1,6 +1,7 @@
 package request;
 
 import request.exceptions.InvalidMethodException;
+import response.StatusCode;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +17,8 @@ public class Method {
         if(VERBS.contains(verb)) {
             this.verb = verb;
         } else {
-            throw new InvalidMethodException("\"" + verb + "\" is not a valid verb");
+            Request.code = new StatusCode("400");
+//            throw new InvalidMethodException("\"" + verb + "\" is not a valid verb");
         }
     }
 
