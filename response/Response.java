@@ -19,6 +19,8 @@ public class Response {
     private Headers headers;
     private Body body;
 
+    public static boolean hasBody;
+
     public Response(Socket client, Request request) throws ResponseErrorException, IOException {
         version = request.getVersion();
         code = request.getCode();
@@ -26,6 +28,7 @@ public class Response {
         headers = new Headers();
         headers.addHeader("Date", new Header(getServerTime()));
         headers.addHeader("Server", new Header("Clarkson_&_Gao_Server"));
+        hasBody = false;
         switch (request.getMethod().getVerb()) {
             case "GET" :
                 handleGETRequest(request);
@@ -45,17 +48,21 @@ public class Response {
     }
 
     private void handleGETRequest(Request request) throws IOException {
-        headers.addHeader("Connection", new Header("close"));
-        headers.addHeader("WWW-Authenticate", new Header("Basic"));
-
-        String uri = request.getId().getURI();
-        String extension = uri.substring(uri.lastIndexOf(".") + 1);
-        String contentType = Configuration.getMime().getMimeType(extension);
-        headers.addHeader("Content-Type", new Header(contentType));
-
-        body = new Body(request.getId().getURI());
-
-        headers.addHeader("Content-Length", new Header(body.getLength()));
+        if(code.getCode().equals("200")) {
+            headers.addHeader("Connection", new Header("close"));
+            headers.addHeader("WWW-Authenticate", new Header("Basic"));
+            String uri = request.getId().getURI();
+            String extension = uri.substring(uri.lastIndexOf(".") + 1);
+            String contentType = Configuration.getMime().getMimeType(extension);
+            headers.addHeader("Content-Type", new Header(contentType));
+            try {
+                body = new Body(request.getId().getURI());
+                headers.addHeader("Content-Length", new Header(body.getLength()));
+                hasBody = true;
+            } catch (Exception e) {
+                System.out.println("No Body");
+            }
+        }
     }
 
     private String handlePhrase(StatusCode code) {

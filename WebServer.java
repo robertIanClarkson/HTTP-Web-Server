@@ -20,7 +20,7 @@ public class WebServer {
         Socket client = null;
 
         while( true ) {
-            try {
+//            try {
                 client = socket.accept();
                 System.out.println("------------Request-------------");
                 Request request = new Request(client);
@@ -28,26 +28,33 @@ public class WebServer {
                 sendResponse(client, response);
                 printDebug(response);
                 client.close();
-            } catch (Exception e) {
-                System.out.println(e);
-            }
+//            } catch (Exception e) {
+//                System.out.println(e);
+//            }
         }
     }
 
     private static void sendResponse(Socket client, Response response) throws IOException {
         /* https://stackoverflow.com/questions/1176135/socket-send-and-receive-byte-array */
         DataOutputStream dOut = new DataOutputStream(client.getOutputStream());
-        int length = response.toString().length() + Integer.parseInt(response.getBody().getLength());
+        int length = response.toString().length();
+        if(Response.hasBody) {
+            length += Integer.parseInt(response.getBody().getLength());
+        }
         byte[] res = response.toString().getBytes();
         dOut.writeInt(length); // write length of the message
         dOut.write(res);
-        dOut.write(response.getBody().getBody());
+        if(Response.hasBody) {
+            dOut.write(response.getBody().getBody());
+        }
     }
 
     private static void printDebug(Response response) {
         System.out.println("------------Response------------");
         System.out.println(response);
-        String body = new String(response.getBody().getBody(), StandardCharsets.US_ASCII);
+        if(Response.hasBody) {
+            String body = new String(response.getBody().getBody(), StandardCharsets.US_ASCII);
+        }
 //        System.out.println(body);
         System.out.println("------------END------------");
     }

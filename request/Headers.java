@@ -16,7 +16,7 @@ public class Headers {
     private static List<String> HEADERS = Arrays.asList(
             "Host", "Connection", "Cache-Control", "DNT", "Upgrade-Insecure-Requests",
             "User-Agent", "Sec-Fetch-User", "Accept", "Sec-Fetch-Site", "Sec-Fetch-Mode",
-            "Accept-Encoding", "Accept-Language"
+            "Accept-Encoding", "Accept-Language", "Referer"
     );
     private HashMap<String, Header> headers;
 
