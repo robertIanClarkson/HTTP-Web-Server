@@ -37,14 +37,16 @@ public class Request {
 
     private void process(String line) throws RequestException, ConfigError {
         System.out.println("> " + line);
-        String[] chunks = line.split(" ");
-        if(chunks.length == 3) {
-            method = new Method(chunks[0]);
-            id = new Identifier(chunks[1]);
-            version = new Version(chunks[2]);
-        } else {
-            code = new StatusCode("400");
-//            throw new RequestException("Invalid HTTP Syntax");
+        if (line != null) {
+            String[] chunks = line.split(" ");
+            if (chunks.length == 3) {
+                method = new Method(chunks[0]);
+                id = new Identifier(chunks[1]);
+                version = new Version(chunks[2]);
+            } else {
+                code = new StatusCode("400");
+                //            throw new RequestException("Invalid HTTP Syntax");
+            }
         }
     }
 
