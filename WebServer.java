@@ -23,11 +23,11 @@ public class WebServer {
 //            try {
                 client = socket.accept();
                 Request request = new Request(client);
-                printRequest(request);
+//                printRequest(request);
                 printStatusCode(request);
                 Response response = new Response(client, request);
                 sendResponse(client, response);
-                printResponse(response);
+//                printResponse(response);
                 client.close();
 //            } catch (Exception e) {
 //                System.out.println(e);
@@ -61,8 +61,8 @@ public class WebServer {
     }
 
     private static void printStatusCode(Request request) {
-        System.out.println("------------StatusCode-------------");
-        System.out.println(request.getId() + " ---> " + request.getCode());
+        System.out.println("------------Code-------------");
+        System.out.printf("%-3s---> %s\n", request.getCode(), request.getId());
     }
 
     private static void printResponse(Response response) {
