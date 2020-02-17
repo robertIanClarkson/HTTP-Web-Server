@@ -31,23 +31,69 @@ public class Response {
         hasBody = false;
         switch (request.getMethod().getVerb()) {
             case "GET" :
-                handleGETRequest(request);
+                handleGET(request);
                 break;
             case "POST" :
-//                handlePOSTRequest(request);
+                handlePOST(request);
+                break;
+            case "HEAD" :
+                handleHEAD(request);
+                break;
+            case "PUT" :
+                handlePUT(request);
+                break;
+            case "DELETE" :
+                handleDELETE(request);
+                break;
+            case "TRACE" :
+                handleTRACE(request);
+                break;
+            case "CONNECT" :
+                handleCONNECT(request);
+                break;
+            case "PATCH" :
+                handlePATCH(request);
                 break;
         }
-
-//        version = request.getVersion();
-//        code = new StatusCode("200");
-//        phrase = new Phrase("OK");
-//
-//
-
-//        body = new Body();
     }
 
-    private void handleGETRequest(Request request) throws IOException {
+    private void handlePATCH(Request request) {
+    }
+
+    private void handleCONNECT(Request request) {
+    }
+
+    private void handleTRACE(Request request) {
+    }
+
+    private void handleDELETE(Request request) {
+    }
+
+    private void handlePUT(Request request) {
+    }
+
+    private void handleHEAD(Request request) {
+    }
+
+    private void handlePOST(Request request) {
+        if(code.getCode().equals("200")) {
+            headers.addHeader("Connection", new Header("close"));
+            headers.addHeader("WWW-Authenticate", new Header("Basic"));
+            String uri = request.getId().getURI();
+            String extension = uri.substring(uri.lastIndexOf(".") + 1);
+            String contentType = Configuration.getMime().getMimeType(extension);
+            headers.addHeader("Content-Type", new Header(contentType));
+            try {
+                body = new Body(request.getId().getURI());
+                headers.addHeader("Content-Length", new Header(body.getLength()));
+                hasBody = true;
+            } catch (Exception e) {
+                System.out.println("No Body");
+            }
+        }
+    }
+
+    private void handleGET(Request request) throws IOException {
         if(code.getCode().equals("200")) {
             headers.addHeader("Connection", new Header("close"));
             headers.addHeader("WWW-Authenticate", new Header("Basic"));
@@ -67,24 +113,14 @@ public class Response {
 
     private String handlePhrase(StatusCode code) {
         switch(code.getCode()) {
-            case "100" :
-                return "Continue";
-            case "101" :
-                return "Switching Protocols";
-            case "102" :
-                return "Processing";
             case "200" :
                 return "OK";
             case "201" :
                 return "Created";
-            case "202" :
-                return " Accepted";
             case "204" :
                 return "No Content";
             case "301" :
                 return "Moved Permanently";
-            case "304" :
-                return "Not Modified";
             case "400" :
                 return "Bad Request";
             case "401" :
@@ -93,18 +129,10 @@ public class Response {
                 return "Forbidden";
             case "404" :
                 return "Not Found";
-            case "418" :
-                return "I’m a teapot";
-            case "420" :
-                return "Enhance Your Calm";
+            case "422" :
+                return "Unprocessable Entity";
             case "500" :
                 return "Internal Server Error";
-            case "501" :
-                return "Not Implemented";
-            case "502" :
-                return "Bad Gateway";
-            case "503" :
-                return "Service Unavailable";
         }
         return null;
     }
