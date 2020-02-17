@@ -11,4 +11,12 @@ public class Query {
     public String getQuery() {
         return query;
     }
+
+    @Override
+    public String toString() {
+        String query = "";
+        query += "?";
+        query += this.query;
+        return query;
+    }
 }

@@ -22,11 +22,12 @@ public class WebServer {
         while( true ) {
 //            try {
                 client = socket.accept();
-                System.out.println("------------Request-------------");
                 Request request = new Request(client);
+                printRequest(request);
+                printStatusCode(request);
                 Response response = new Response(client, request);
                 sendResponse(client, response);
-                printDebug(response);
+                printResponse(response);
                 client.close();
 //            } catch (Exception e) {
 //                System.out.println(e);
@@ -49,13 +50,28 @@ public class WebServer {
         }
     }
 
-    private static void printDebug(Response response) {
+    private static void printRequest(Request request) {
+        System.out.println("------------Request-------------");
+        System.out.println(request);
+        if(Request.hasBody) {
+            System.out.println("***+++HAS BODY+++***");
+//            String body = new String(request.getBody().getBody(), StandardCharsets.US_ASCII);
+//            System.out.println(body);
+        }
+    }
+
+    private static void printStatusCode(Request request) {
+        System.out.println("------------StatusCode-------------");
+        System.out.println(request.getId() + " ---> " + request.getCode());
+    }
+
+    private static void printResponse(Response response) {
         System.out.println("------------Response------------");
         System.out.println(response);
         if(Response.hasBody) {
-            String body = new String(response.getBody().getBody(), StandardCharsets.US_ASCII);
+            System.out.println("***+++HAS BODY+++***");
+//            String body = new String(response.getBody().getBody(), StandardCharsets.US_ASCII);
+//            System.out.println(body);
         }
-//        System.out.println(body);
-        System.out.println("------------END------------");
     }
 }

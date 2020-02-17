@@ -25,4 +25,12 @@ public class Method {
     public String getVerb() {
         return verb;
     }
+
+    @Override
+    public String toString() {
+        String method = "";
+        method += verb;
+        method += " ";
+        return method;
+    }
 }

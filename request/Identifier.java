@@ -10,12 +10,13 @@ import java.nio.file.Paths;
 
 public class Identifier {
 
-    private String id;
+    private String id, uri;
     private Query query;
 
     public static boolean hasQuery = false;
 
     public Identifier(String id) throws InvalidIdentifierException, ConfigError {
+        this.uri = id;
         if(id.contains("?")) {
             query = new Query( id.substring(id.lastIndexOf("?") + 1) );
             id = id.substring(0, id.indexOf("?"));
@@ -45,5 +46,16 @@ public class Identifier {
 
     public Query getQuery() {
         return query;
+    }
+
+    @Override
+    public String toString() {
+        String id = "";
+        id += this.uri;
+        if(hasQuery) {
+            id += this.query;
+        }
+        id += " ";
+        return id;
     }
 }

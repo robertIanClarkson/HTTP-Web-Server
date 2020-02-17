@@ -30,7 +30,6 @@ public class Headers {
         String line, key, value;
         headers = new HashMap<>();
         while(!(line = reader.readLine()).equals("")) {
-            System.out.println("> " + line);
             key = line.substring(0, line.indexOf(":")).trim();
             value = line.substring(line.indexOf(":") + 1).trim();
             header = new Header(value);

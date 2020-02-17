@@ -22,10 +22,11 @@ public class Request {
     private Body body;
 
     public static StatusCode code;
+    public static boolean hasBody;
 
     public Request(Socket client) throws IOException, RequestException, ConfigError {
         String bodyLength;
-
+        hasBody = false;
         reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
         );
@@ -35,11 +36,11 @@ public class Request {
         if (headers.hasBody()) {
             bodyLength = headers.getHeader("Content-Length").getValue();
             body = new Body(client.getInputStream(), Integer.parseInt(bodyLength));
+            hasBody = true;
         }
     }
 
     private void process(String line) throws RequestException, ConfigError {
-        System.out.println("> " + line);
         if (line != null) {
             String[] chunks = line.split(" ");
             if (chunks.length == 3) {
@@ -87,6 +88,16 @@ public class Request {
 
     public StatusCode getCode() {
         return code;
+    }
+
+    @Override
+    public String toString() {
+        String request = "";
+        request += method;
+        request += id;
+        request += version.getVersion() + "\r\n";
+        request += headers;
+        return request;
     }
 }
 
