@@ -5,7 +5,7 @@ import java.io.IOException;
 public class HttpdConfig {
 
     private HttpdLines lines;
-    private String serverRoot, documentRoot, directoryIndex, logFile, scriptAlias;
+    private String serverRoot, documentRoot, directoryIndex, logFile;
     private int listen;
 
     HttpdConfig( String fileName ) throws IOException, ConfigError {
@@ -14,7 +14,6 @@ public class HttpdConfig {
         documentRoot = lines.getDirective("DocumentRoot");
         directoryIndex = lines.getDirective("DirectoryIndex");
         logFile = lines.getDirective("LogFile");
-        scriptAlias = lines.getDirective("ScriptAlias");
         listen = Integer.parseInt(lines.getDirective("Listen"));
     }
 
@@ -36,10 +35,6 @@ public class HttpdConfig {
 
     public String getLogFile() {
         return logFile;
-    }
-
-    public String getScriptAlias() {
-        return scriptAlias;
     }
 
     public boolean isAlias(String id) {

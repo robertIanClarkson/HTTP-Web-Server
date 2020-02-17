@@ -16,7 +16,7 @@ public class HttpdLines {
         String line, key, value;
         while((line = reader.readLine()) != null) {
             key = line.substring(0, line.indexOf(" ")).trim();
-            if(key.equals("Alias")) {
+            if(key.equals("Alias") || key.equals("ScriptAlias")) {
                 addAlias(line);
             } else {
                 value = stripQuotes(line.substring(line.indexOf(" "))).trim();
