@@ -11,9 +11,14 @@ import java.nio.file.Paths;
 public class Identifier {
 
     private String id;
+    private Query query;
 
     public Identifier(String id) throws InvalidIdentifierException, ConfigError {
-//        id = resolveAlias(id);
+        if(id.contains("?")) {
+            query = new Query( id.substring(id.lastIndexOf("?") + 1) );
+            id = id.substring(0, id.indexOf("?"));
+        }
+
         if(Configuration.getHttpd().isAlias(id)) {
             this.id = Configuration.getHttpd().getAlias(id);
         } else {
@@ -33,5 +38,9 @@ public class Identifier {
 
     public String getURI() {
         return id;
+    }
+
+    public Query getQuery() {
+        return query;
     }
 }
