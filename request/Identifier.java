@@ -13,10 +13,13 @@ public class Identifier {
     private String id;
     private Query query;
 
+    public static boolean hasQuery = false;
+
     public Identifier(String id) throws InvalidIdentifierException, ConfigError {
         if(id.contains("?")) {
             query = new Query( id.substring(id.lastIndexOf("?") + 1) );
             id = id.substring(0, id.indexOf("?"));
+            hasQuery = true;
         }
 
         if(Configuration.getHttpd().isAlias(id)) {
