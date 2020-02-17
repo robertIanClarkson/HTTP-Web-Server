@@ -1,6 +1,5 @@
 package request;
 
-import configuration.Configuration;
 import request.exceptions.InvalidHeaderException;
 import response.StatusCode;
 
@@ -29,13 +28,11 @@ public class Headers {
     public Headers(BufferedReader reader) throws IOException, InvalidHeaderException {
         Header header;
         String line, key, value;
-        String[] data;
         headers = new HashMap<>();
         while(!(line = reader.readLine()).equals("")) {
             System.out.println("> " + line);
-            data = line.split(": ");
-            key = data[0];
-            value = data[1];
+            key = line.substring(0, line.indexOf(":")).trim();
+            value = line.substring(line.indexOf(":") + 1).trim();
             header = new Header(value);
             if(HEADERS.contains(key)) {
                 headers.put(key, header);
