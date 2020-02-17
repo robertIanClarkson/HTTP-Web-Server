@@ -6,6 +6,7 @@ import response.StatusCode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.rmi.RemoteException;
@@ -13,6 +14,7 @@ import java.rmi.RemoteException;
 public class Request {
 
     private BufferedReader reader;
+
     private Method method;
     private Identifier id;
     private Version version;
@@ -23,6 +25,7 @@ public class Request {
 
     public Request(Socket client) throws IOException, RequestException, ConfigError {
         String bodyLength;
+
         reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
         );
@@ -31,7 +34,7 @@ public class Request {
         headers = new Headers(reader);
         if (headers.hasBody()) {
             bodyLength = headers.getHeader("Content-Length").getValue();
-            body = new Body(reader, Integer.parseInt(bodyLength));
+            body = new Body(client.getInputStream(), Integer.parseInt(bodyLength));
         }
     }
 

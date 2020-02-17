@@ -1,21 +1,19 @@
 package request;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 public class Body {
 
-    private Byte[] body;
+    private byte[] body;
 
-    public Body() {
+    public Body(InputStream is, int length) throws IOException {
+        body = new byte[length];
+        body = is.readNBytes(length);
     }
 
-    public Body(BufferedReader reader, int length) throws IOException {
-        String line = "";
-        while((line = reader.readLine()) != null) {
-            System.out.println(line);
-        }
+    public byte[] getBody() {
+        return body;
     }
 
     @Override
