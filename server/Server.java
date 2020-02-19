@@ -28,7 +28,7 @@ public class Server {
                 client = socket.accept();
                 Request request = new Request(client);
                 Resource.handleURI(request);
-                Response response = new Response(client, request);
+                Response response = new Response(request);
                 sendResponse(client, response);
                 client.close();
                 printRequest(request);
@@ -39,8 +39,6 @@ public class Server {
             System.out.println("SocketError ---> " + e);
         } catch (ConfigError e) {
             System.out.println("ConfigError ---> " + e);
-        } catch (ResponseError e) {
-            System.out.println("ResponseError ---> " + e);
         }
     }
 
