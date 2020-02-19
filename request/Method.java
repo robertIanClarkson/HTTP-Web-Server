@@ -1,6 +1,5 @@
 package request;
 
-import request.exceptions.InvalidMethodError;
 import response.StatusCode;
 
 import java.util.Arrays;
@@ -13,7 +12,7 @@ public class Method {
     );
     private String verb;
 
-    public Method(String verb) throws InvalidMethodError {
+    public Method(String verb) {
         if(VERBS.contains(verb)) {
             this.verb = verb;
         } else {

@@ -22,7 +22,7 @@ public class Request {
     public static StatusCode code;
     public static boolean hasBody;
 
-    public Request(Socket client) throws IOException, RequestError, ConfigError {
+    public Request(Socket client) throws IOException {
         String bodyLength;
         hasBody = false;
         reader = new BufferedReader(
@@ -38,7 +38,7 @@ public class Request {
         }
     }
 
-    private void process(String line) throws RequestError, ConfigError {
+    private void process(String line) {
         if (line != null) {
             String[] chunks = line.split(" ");
             if (chunks.length == 3) {
@@ -47,7 +47,6 @@ public class Request {
                 version = new Version(chunks[2]);
             } else {
                 code = new StatusCode("400");
-                //            throw new RequestException("Invalid HTTP Syntax");
             }
         }
     }

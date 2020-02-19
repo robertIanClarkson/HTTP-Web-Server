@@ -1,6 +1,5 @@
 package request;
 
-import request.exceptions.InvalidVersionError;
 import response.StatusCode;
 
 import java.util.Arrays;
@@ -14,12 +13,11 @@ public class Version {
 
     private String version;
 
-    public Version(String version) throws InvalidVersionError {
+    public Version(String version) {
         if(VERSIONS.contains(version)) {
             this.version = version;
         } else {
             Request.code = new StatusCode("400");
-//            throw new InvalidVersionException("\"" + version + "\" is not a valid version of HTTP");
         }
     }
 

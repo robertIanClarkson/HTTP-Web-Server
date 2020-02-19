@@ -1,51 +1,31 @@
 package request;
 
-import configuration.ConfigError;
-import configuration.Configuration;
-import request.exceptions.InvalidIdentifierError;
-import response.StatusCode;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 public class Identifier {
 
-    private String id, uri;
+    private String uri;
     private Query query;
+    private boolean hasQuery;
 
-    public static boolean hasQuery = false;
-
-    public Identifier(String id) throws InvalidIdentifierError, ConfigError {
-        this.uri = id;
-        if(id.contains("?")) {
-            query = new Query( id.substring(id.lastIndexOf("?") + 1) );
-            id = id.substring(0, id.indexOf("?"));
-            hasQuery = true;
-        }
-
-        if(Configuration.getHttpd().isAlias(id)) {
-            this.id = Configuration.getHttpd().getAlias(id);
-        } else {
-            this.id = Configuration.getHttpd().getDocumentRoot() + id.substring(1);
-        }
-
-        if(this.id.endsWith("/")) {
-            /* if no file is given then give index.html */
-            this.id += Configuration.getHttpd().getDirectoryIndex();
-        }
-
-        if(Files.notExists(Paths.get(this.id))){
-            Request.code = new StatusCode("404");
-//            throw new InvalidIdentifierException("File \"" + id + "\" does not exist");
-        }
+    public Identifier(String uri) {
+        hasQuery = false;
+        this.uri = uri;
     }
 
     public String getURI() {
-        return id;
+        return uri;
+    }
+
+    public void setURI(String uri) {
+        this.uri = uri;
     }
 
     public Query getQuery() {
         return query;
+    }
+
+    public void setQuery(Query query) {
+        this.query = query;
+        hasQuery = true;
     }
 
     @Override

@@ -1,39 +1,39 @@
 import configuration.ConfigError;
 import configuration.Configuration;
 import request.Request;
-import request.exceptions.RequestException;
 import resource.Resource;
 import response.Response;
-import response.exception.ResponseErrorException;
+import response.exception.ResponseError;
 
 import java.net.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class WebServer {
+    public static void main(String[] args) {
+        try {
+            new Configuration("conf/httpd.conf", "conf/mime.types");
+            new Resource();
+            ServerSocket socket = new ServerSocket( Configuration.getHttpd().getListen() );
+            Socket client = null;
 
-    public static final int DEFAULT_PORT = 8096;
-
-    public static void main(String[] args) throws IOException, ConfigError, RequestException, ResponseErrorException {
-        new Configuration("conf/httpd.conf", "conf/mime.types");
-
-        ServerSocket socket = new ServerSocket( Configuration.getHttpd().getListen() );
-        Socket client = null;
-
-        while( true ) {
-//            try {
+            while( true ) {
                 client = socket.accept();
                 Request request = new Request(client);
-                Resource resource = new Resource(request);
-//                printRequest(request);
-//                printStatusCode(request);
+                Resource.handleURI(request);
                 Response response = new Response(client, request);
                 sendResponse(client, response);
-//                printResponse(response);
                 client.close();
-//            } catch (Exception e) {
-//                System.out.println(e);
-//            }
+                printRequest(request);
+                printStatusCode(request);
+                printResponse(response);
+            }
+        } catch (IOException e) {
+            System.out.println("SocketError ---> " + e);
+        } catch (ConfigError e) {
+            System.out.println("ConfigError ---> " + e);
+        } catch (ResponseError e) {
+            System.out.println("ResponseError ---> " + e);
         }
     }
 
