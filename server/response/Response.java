@@ -150,7 +150,16 @@ public class Response {
         return dateFormat.format(calendar.getTime());
     }
 
-    private boolean runScript(Request request) {
+    private boolean runScript(Request request) throws IOException {
+        try {
+            Runtime runtime = Runtime.getRuntime();
+            Process process = runtime.exec("perl -T " + request.getId().getURI());
+            process.waitFor();
+            System.out.println(process.exitValue());
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         return false;
     }
 
