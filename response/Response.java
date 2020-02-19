@@ -2,7 +2,7 @@ package response;
 
 import configuration.Configuration;
 import request.*;
-import response.exception.ResponseErrorException;
+import response.exception.ResponseError;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -21,7 +21,7 @@ public class Response {
 
     public static boolean hasBody;
 
-    public Response(Socket client, Request request) throws ResponseErrorException, IOException {
+    public Response(Socket client, Request request) throws ResponseError, IOException {
         version = request.getVersion();
         code = request.getCode();
         phrase = new Phrase(handlePhrase(code));

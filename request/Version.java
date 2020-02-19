@@ -1,6 +1,6 @@
 package request;
 
-import request.exceptions.InvalidVersionException;
+import request.exceptions.InvalidVersionError;
 import response.StatusCode;
 
 import java.util.Arrays;
@@ -14,7 +14,7 @@ public class Version {
 
     private String version;
 
-    public Version(String version) throws InvalidVersionException {
+    public Version(String version) throws InvalidVersionError {
         if(VERSIONS.contains(version)) {
             this.version = version;
         } else {

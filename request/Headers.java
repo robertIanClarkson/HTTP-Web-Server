@@ -1,6 +1,6 @@
 package request;
 
-import request.exceptions.InvalidHeaderException;
+import request.exceptions.InvalidHeaderError;
 import response.StatusCode;
 
 import java.io.BufferedReader;
@@ -25,7 +25,7 @@ public class Headers {
         headers = new HashMap<>();
     }
 
-    public Headers(BufferedReader reader) throws IOException, InvalidHeaderException {
+    public Headers(BufferedReader reader) throws IOException, InvalidHeaderError {
         Header header;
         String line, key, value;
         headers = new HashMap<>();

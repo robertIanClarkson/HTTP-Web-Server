@@ -2,7 +2,7 @@ package request;
 
 import configuration.ConfigError;
 import configuration.Configuration;
-import request.exceptions.InvalidIdentifierException;
+import request.exceptions.InvalidIdentifierError;
 import response.StatusCode;
 
 import java.nio.file.Files;
@@ -15,7 +15,7 @@ public class Identifier {
 
     public static boolean hasQuery = false;
 
-    public Identifier(String id) throws InvalidIdentifierException, ConfigError {
+    public Identifier(String id) throws InvalidIdentifierError, ConfigError {
         this.uri = id;
         if(id.contains("?")) {
             query = new Query( id.substring(id.lastIndexOf("?") + 1) );

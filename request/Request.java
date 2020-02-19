@@ -1,15 +1,13 @@
 package request;
 
 import configuration.ConfigError;
-import request.exceptions.RequestException;
+import request.exceptions.RequestError;
 import response.StatusCode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.rmi.RemoteException;
 
 public class Request {
 
@@ -24,7 +22,7 @@ public class Request {
     public static StatusCode code;
     public static boolean hasBody;
 
-    public Request(Socket client) throws IOException, RequestException, ConfigError {
+    public Request(Socket client) throws IOException, RequestError, ConfigError {
         String bodyLength;
         hasBody = false;
         reader = new BufferedReader(
@@ -40,7 +38,7 @@ public class Request {
         }
     }
 
-    private void process(String line) throws RequestException, ConfigError {
+    private void process(String line) throws RequestError, ConfigError {
         if (line != null) {
             String[] chunks = line.split(" ");
             if (chunks.length == 3) {
