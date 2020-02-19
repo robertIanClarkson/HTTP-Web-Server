@@ -1,8 +1,8 @@
-package response;
+package server.response;
 
 import server.configuration.Configuration;
 import server.request.*;
-import response.exception.ResponseError;
+import server.response.exception.ResponseError;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -174,7 +174,7 @@ public class Response {
         response += code;
         response += phrase;
         response += headers;
-//        response += body;
+//        server.response += body;
         return response;
     }
 }

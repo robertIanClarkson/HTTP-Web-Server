@@ -1,6 +1,6 @@
 package server.request;
 
-import response.StatusCode;
+import server.response.StatusCode;
 
 import java.io.BufferedReader;
 import java.io.IOException;

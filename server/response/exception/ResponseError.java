@@ -1,4 +1,4 @@
-package response.exception;
+package server.response.exception;
 
 public class ResponseError extends Exception {
     public ResponseError(String message) {

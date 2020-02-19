@@ -4,7 +4,7 @@ import server.configuration.ConfigError;
 import server.configuration.Configuration;
 import server.request.Query;
 import server.request.Request;
-import response.StatusCode;
+import server.response.StatusCode;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

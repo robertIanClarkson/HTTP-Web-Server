@@ -2,8 +2,8 @@ import server.configuration.ConfigError;
 import server.configuration.Configuration;
 import server.request.Request;
 import server.resource.Resource;
-import response.Response;
-import response.exception.ResponseError;
+import server.response.Response;
+import server.response.exception.ResponseError;
 
 import java.net.*;
 import java.io.*;
@@ -71,7 +71,7 @@ public class WebServer {
         System.out.println(response);
         if(Response.hasBody) {
 //            System.out.println("***+++HAS BODY+++***");
-//            String body = new String(response.getBody().getBody(), StandardCharsets.US_ASCII);
+//            String body = new String(server.response.getBody().getBody(), StandardCharsets.US_ASCII);
 //            System.out.println(body);
         }
     }

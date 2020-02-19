@@ -1,6 +1,6 @@
 package server.request;
 
-import response.StatusCode;
+import server.response.StatusCode;
 
 import java.util.Arrays;
 import java.util.List;

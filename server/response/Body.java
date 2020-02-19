@@ -1,4 +1,4 @@
-package response;
+package server.response;
 
 /* Used code from: https://stackoverflow.com/questions/858980/file-to-byte-in-java */
 import java.io.File;
