@@ -11,9 +11,7 @@ import java.nio.file.Paths;
 
 public class Resource {
 
-    public Resource() {
-
-    }
+    public Resource() { }
 
     public static void handleURI(Request request) throws ConfigError {
         Query query;

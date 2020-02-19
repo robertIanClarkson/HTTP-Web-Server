@@ -2,10 +2,8 @@ package server.response;
 
 import server.configuration.Configuration;
 import server.request.*;
-import server.response.exception.ResponseError;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -21,7 +19,7 @@ public class Response {
 
     public static boolean hasBody;
 
-    public Response(Socket client, Request request) throws ResponseError, IOException {
+    public Response(Request request) throws IOException {
         version = request.getVersion();
         code = request.getCode();
         phrase = new Phrase(handlePhrase(code));

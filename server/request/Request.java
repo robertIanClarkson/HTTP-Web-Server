@@ -8,15 +8,12 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class Request {
-
     private BufferedReader reader;
-
     private Method method;
     private Identifier id;
     private Version version;
     private Headers headers;
     private Body body;
-
     public static StatusCode code;
     public static boolean hasBody;
 
