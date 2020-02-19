@@ -1,4 +1,4 @@
-package resource.exception;
+package server.resource.exception;
 
 public class ResourceError extends Exception {
     public ResourceError(String message) {

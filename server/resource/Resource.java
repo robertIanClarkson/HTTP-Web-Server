@@ -1,4 +1,4 @@
-package resource;
+package server.resource;
 
 import server.configuration.ConfigError;
 import server.configuration.Configuration;

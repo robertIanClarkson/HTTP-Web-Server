@@ -1,7 +1,7 @@
 import server.configuration.ConfigError;
 import server.configuration.Configuration;
 import server.request.Request;
-import resource.Resource;
+import server.resource.Resource;
 import response.Response;
 import response.exception.ResponseError;
 
