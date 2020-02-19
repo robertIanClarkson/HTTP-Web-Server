@@ -1,5 +1,6 @@
 package server;
 
+import server.accessCheck.AccessCheck;
 import server.configuration.ConfigError;
 import server.configuration.Configuration;
 import server.request.Request;
@@ -21,6 +22,7 @@ public class Server {
         try {
             new Configuration("conf/httpd.conf", "conf/mime.types");
             new Resource();
+            new AccessCheck();
             ServerSocket socket = new ServerSocket( Configuration.getHttpd().getListen() );
             Socket client = null;
 
@@ -28,6 +30,7 @@ public class Server {
                 client = socket.accept();
                 Request request = new Request(client);
                 Resource.handleURI(request);
+                AccessCheck.check(request);
                 Response response = new Response(request);
                 sendResponse(client, response);
                 client.close();
