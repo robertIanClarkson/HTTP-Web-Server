@@ -93,6 +93,11 @@ public class Response {
 
     private void handleGET(Request request) throws IOException {
         if(code.getCode().equals("200")) {
+            if(Request.hasScriptAlias) {
+                if(!runScript(request)) {
+                    code = new StatusCode("500");
+                }
+            }
             headers.addHeader("Connection", new Header("close"));
             headers.addHeader("WWW-Authenticate", new Header("Basic"));
             String uri = request.getId().getURI();
@@ -143,6 +148,10 @@ public class Response {
 //                "EEE, dd MMM yyyy HH:mm:ss", Locale.US);
         dateFormat.setTimeZone(TimeZone.getTimeZone("PST"));
         return dateFormat.format(calendar.getTime());
+    }
+
+    private boolean runScript(Request request) {
+        return false;
     }
 
     public Version getVersion() {
