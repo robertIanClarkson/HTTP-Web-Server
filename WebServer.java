@@ -2,6 +2,7 @@ import configuration.ConfigError;
 import configuration.Configuration;
 import request.Request;
 import request.exceptions.RequestException;
+import resource.Resource;
 import response.Response;
 import response.exception.ResponseErrorException;
 
@@ -23,8 +24,9 @@ public class WebServer {
 //            try {
                 client = socket.accept();
                 Request request = new Request(client);
+                Resource resource = new Resource(request);
 //                printRequest(request);
-                printStatusCode(request);
+//                printStatusCode(request);
                 Response response = new Response(client, request);
                 sendResponse(client, response);
 //                printResponse(response);
@@ -69,9 +71,9 @@ public class WebServer {
         System.out.println("------------Response------------");
         System.out.println(response);
         if(Response.hasBody) {
-            System.out.println("***+++HAS BODY+++***");
-//            String body = new String(response.getBody().getBody(), StandardCharsets.US_ASCII);
-//            System.out.println(body);
+//            System.out.println("***+++HAS BODY+++***");
+            String body = new String(response.getBody().getBody(), StandardCharsets.US_ASCII);
+            System.out.println(body);
         }
     }
 }
