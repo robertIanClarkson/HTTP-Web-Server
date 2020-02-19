@@ -16,6 +16,7 @@ public class Request {
     private Body body;
     public static StatusCode code;
     public static boolean hasBody;
+    public static boolean hasScriptAlias;
 
     public Request(Socket client) throws IOException {
         String bodyLength;

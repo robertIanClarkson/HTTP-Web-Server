@@ -9,14 +9,17 @@ public class HttpdLines {
 
     private HashMap<String, String> directives = new HashMap<>();
     private HashMap<String, String> alias = new HashMap<>();
+    private HashMap<String, String> scriptAlias = new HashMap<>();
 
     public HttpdLines(String fileName) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(fileName));
         String line, key, value;
         while((line = reader.readLine()) != null) {
             key = line.substring(0, line.indexOf(" ")).trim();
-            if(key.equals("Alias") || key.equals("ScriptAlias")) {
+            if(key.equals("Alias")) {
                 addAlias(line);
+            } else if(key.equals("ScriptAlias")) {
+                addScriptAlias(line);
             } else {
                 value = stripQuotes(line.substring(line.indexOf(" "))).trim();
                 directives.put(key, value);
@@ -32,6 +35,15 @@ public class HttpdLines {
         }
     }
 
+    public boolean isScriptAlias(String id) {
+        for (String currentkey : scriptAlias.keySet()) {
+            if(id.contains(currentkey)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isAlias(String id) {
         for (String currentkey : alias.keySet()) {
             if(id.contains(currentkey)) {
@@ -39,6 +51,19 @@ public class HttpdLines {
             }
         }
         return false;
+    }
+
+    public String getScriptAlias(String id) {
+        String key, value, resolvedID = "";
+        for(String currentKey : scriptAlias.keySet()) {
+            if(id.contains(currentKey)) {
+                key = currentKey;
+                value = scriptAlias.get(key);
+                resolvedID = value + id.substring(id.lastIndexOf(key)+key.length());
+                break;
+            }
+        }
+        return resolvedID;
     }
 
     public String getAlias(String id) {
@@ -67,5 +92,11 @@ public class HttpdLines {
         String key = line.substring(line.indexOf(" "), line.lastIndexOf(" ")).trim();
         String value = stripQuotes(line.substring(line.lastIndexOf(" ")));
         alias.put(key, value);
+    }
+
+    private void addScriptAlias(String line) {
+        String key = line.substring(line.indexOf(" "), line.lastIndexOf(" ")).trim();
+        String value = stripQuotes(line.substring(line.lastIndexOf(" ")));
+        scriptAlias.put(key, value);
     }
 }
