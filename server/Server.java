@@ -27,6 +27,7 @@ public class Server {
             Socket client = null;
 
             while( true ) {
+
                 client = socket.accept();
                 Request request = new Request(client);
                 Resource.handleURI(request);
@@ -34,9 +35,9 @@ public class Server {
                 Response response = new Response(request);
                 sendResponse(client, response);
                 client.close();
-                printRequest(request);
-                printStatusCode(request);
-                printResponse(response);
+//                printRequest(request);
+//                printStatusCode(request);
+//                printResponse(response);
             }
         } catch (IOException e) {
             System.out.println("SocketError ---> " + e);
