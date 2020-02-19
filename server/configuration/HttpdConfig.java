@@ -1,4 +1,4 @@
-package configuration;
+package server.configuration;
 
 import java.io.IOException;
 

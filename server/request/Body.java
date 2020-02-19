@@ -1,7 +1,6 @@
-package request;
+package server.request;
 
 import java.io.*;
-import java.net.Socket;
 
 public class Body {
 

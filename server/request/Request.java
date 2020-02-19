@@ -1,7 +1,5 @@
-package request;
+package server.request;
 
-import configuration.ConfigError;
-import request.exceptions.RequestError;
 import response.StatusCode;
 
 import java.io.BufferedReader;

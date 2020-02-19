@@ -1,4 +1,4 @@
-package request.exceptions;
+package server.request.exceptions;
 
 public class RequestError extends Exception {
     public RequestError(String message) {

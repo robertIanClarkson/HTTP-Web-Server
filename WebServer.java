@@ -1,13 +1,12 @@
-import configuration.ConfigError;
-import configuration.Configuration;
-import request.Request;
+import server.configuration.ConfigError;
+import server.configuration.Configuration;
+import server.request.Request;
 import resource.Resource;
 import response.Response;
 import response.exception.ResponseError;
 
 import java.net.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 public class WebServer {
     public static void main(String[] args) {
@@ -57,7 +56,7 @@ public class WebServer {
         System.out.println(request);
         if(Request.hasBody) {
             System.out.println("***+++HAS BODY+++***");
-//            String body = new String(request.getBody().getBody(), StandardCharsets.US_ASCII);
+//            String body = new String(server.request.getBody().getBody(), StandardCharsets.US_ASCII);
 //            System.out.println(body);
         }
     }
@@ -72,8 +71,8 @@ public class WebServer {
         System.out.println(response);
         if(Response.hasBody) {
 //            System.out.println("***+++HAS BODY+++***");
-            String body = new String(response.getBody().getBody(), StandardCharsets.US_ASCII);
-            System.out.println(body);
+//            String body = new String(response.getBody().getBody(), StandardCharsets.US_ASCII);
+//            System.out.println(body);
         }
     }
 }

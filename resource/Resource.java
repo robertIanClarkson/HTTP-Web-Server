@@ -1,9 +1,9 @@
 package resource;
 
-import configuration.ConfigError;
-import configuration.Configuration;
-import request.Query;
-import request.Request;
+import server.configuration.ConfigError;
+import server.configuration.Configuration;
+import server.request.Query;
+import server.request.Request;
 import response.StatusCode;
 
 import java.nio.file.Files;

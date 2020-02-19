@@ -1,4 +1,4 @@
-package request;
+package server.request;
 
 import response.StatusCode;
 

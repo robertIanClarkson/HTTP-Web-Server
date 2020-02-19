@@ -1,7 +1,7 @@
 package response;
 
-import configuration.Configuration;
-import request.*;
+import server.configuration.Configuration;
+import server.request.*;
 import response.exception.ResponseError;
 
 import java.io.IOException;
