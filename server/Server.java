@@ -3,6 +3,7 @@ package server;
 import server.accessCheck.AccessCheck;
 import server.configuration.ConfigError;
 import server.configuration.Configuration;
+import server.logs.Log;
 import server.request.Request;
 import server.resource.Resource;
 import server.response.Response;
@@ -23,6 +24,7 @@ public class Server {
             new Configuration("conf/httpd.conf", "conf/mime.types");
             new Resource();
             new AccessCheck();
+            new Log();
             ServerSocket socket = new ServerSocket( Configuration.getHttpd().getListen() );
             Socket client = null;
 
@@ -35,9 +37,10 @@ public class Server {
                 Response response = new Response(request);
                 sendResponse(client, response);
                 client.close();
-//                printRequest(request);
-//                printStatusCode(request);
-//                printResponse(response);
+                Log.newLog(request, response);
+                printRequest(request);
+                printStatusCode(request);
+                printResponse(response);
             }
         } catch (IOException e) {
             System.out.println("SocketError ---> " + e);
@@ -48,16 +51,17 @@ public class Server {
 
     private static void sendResponse(Socket client, Response response) throws IOException {
         /* https://stackoverflow.com/questions/1176135/socket-send-and-receive-byte-array */
-        DataOutputStream dOut = new DataOutputStream(client.getOutputStream());
+        DataOutputStream out = new DataOutputStream(client.getOutputStream());
         int length = response.toString().length();
         if(Response.hasBody) {
-            length += Integer.parseInt(response.getBody().getLength());
+            length += response.getBody().getLength();
         }
         byte[] res = response.toString().getBytes();
-        dOut.writeInt(length); // write length of the message
-        dOut.write(res);
+        out.writeInt(length); // write length of the message
+        out.write(res);
         if(Response.hasBody) {
-            dOut.write(response.getBody().getBody());
+            out.write(response.getBody().getBody());
+            out.close();
         }
     }
 
