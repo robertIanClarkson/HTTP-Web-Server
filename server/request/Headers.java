@@ -28,7 +28,9 @@ public class Headers {
         Header header;
         String line, key, value;
         headers = new HashMap<>();
-        while(!(line = reader.readLine()).equals("")) {
+        line = reader.readLine();
+        while(line != null && !(line.equals(""))) {
+            System.out.println(line);
             key = line.substring(0, line.indexOf(":")).trim();
             value = line.substring(line.indexOf(":") + 1).trim();
             header = new Header(value);
@@ -37,6 +39,7 @@ public class Headers {
             } else {
                 Request.code = new StatusCode("400");
             }
+            line = reader.readLine();
         }
     }
 
