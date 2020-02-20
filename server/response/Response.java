@@ -99,7 +99,6 @@ public class Response {
                 }
             }
             headers.addHeader("Connection", new Header("close"));
-            headers.addHeader("WWW-Authenticate", new Header("Basic"));
             String uri = request.getId().getURI();
             String extension = uri.substring(uri.lastIndexOf(".") + 1);
             String contentType = Configuration.getMime().getMimeType(extension);
