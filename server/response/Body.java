@@ -14,8 +14,8 @@ public class Body {
         body = Files.readAllBytes(file.toPath());
     }
 
-    public String getLength() {
-        return String.valueOf(body.length);
+    public int getLength() {
+        return body.length;
     }
 
     public byte[] getBody() {
