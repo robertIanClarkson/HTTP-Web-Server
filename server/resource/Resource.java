@@ -15,8 +15,13 @@ public class Resource {
 
     public static void handleURI(Request request) throws ConfigError {
         Query query;
-        String uri = request.getId().getURI();
-
+        String uri;
+        try {
+            uri = request.getId().getURI();
+        } catch (NullPointerException e) {
+            System.out.println(e);
+            return;
+        }
         if(uri.contains("?")) {
             query = new Query( uri.substring(uri.lastIndexOf("?") + 1) );
             uri = uri.substring(0, uri.indexOf("?"));
