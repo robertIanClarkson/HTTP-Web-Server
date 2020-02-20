@@ -5,3 +5,4 @@
 conf/httpd.conf
 out/
 server/public_html/.htaccess
+server/logs/logs.txt
