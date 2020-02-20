@@ -4,3 +4,4 @@
 *.class
 conf/httpd.conf
 out/
+server/public_html/.htaccess
