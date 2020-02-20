@@ -8,7 +8,11 @@ public class Identifier {
 
     public Identifier(String uri) {
         hasQuery = false;
-        this.uri = uri;
+        if(uri.isEmpty()) {
+            this.uri = "/";
+        } else {
+            this.uri = uri;
+        }
     }
 
     public String getURI() {
