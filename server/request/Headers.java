@@ -15,7 +15,7 @@ public class Headers {
             "Host", "Connection", "Cache-Control", "DNT", "Upgrade-Insecure-Requests",
             "User-Agent", "Sec-Fetch-User", "Accept", "Sec-Fetch-Site", "Sec-Fetch-Mode",
             "Accept-Encoding", "Accept-Language", "Referer", "X-Requested-With",
-            "If-Modified-Since", "If-None-Match"
+            "If-Modified-Since", "If-None-Match", "Pragma"
 
     );
     private HashMap<String, Header> headers;
