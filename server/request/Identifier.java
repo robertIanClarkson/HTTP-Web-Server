@@ -2,11 +2,12 @@ package server.request;
 
 public class Identifier {
 
-    private String uri;
+    private String uri, originalURI;
     private Query query;
     private boolean hasQuery;
 
     public Identifier(String uri) {
+        originalURI = uri;
         hasQuery = false;
         if(uri.isEmpty()) {
             this.uri = "/";
@@ -16,7 +17,7 @@ public class Identifier {
     }
 
     public String getURI() {
-        return uri;
+        return this.uri;
     }
 
     public void setURI(String uri) {
@@ -30,6 +31,10 @@ public class Identifier {
     public void setQuery(Query query) {
         this.query = query;
         hasQuery = true;
+    }
+
+    public String getOriginalURI() {
+        return originalURI;
     }
 
     @Override
