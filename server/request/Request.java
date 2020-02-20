@@ -87,7 +87,7 @@ public class Request {
     public String toString() {
         String request = "";
         request += method;
-        request += id;
+        request += id.getOriginalURI() + " ";
         request += version.getVersion() + "\r\n";
         request += headers;
         return request;
