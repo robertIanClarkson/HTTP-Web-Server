@@ -83,7 +83,7 @@ public class Response {
             headers.addHeader("Content-Type", new Header(contentType));
             try {
                 body = new Body(request.getId().getURI());
-                headers.addHeader("Content-Length", new Header(body.getLength()));
+                headers.addHeader("Content-Length", new Header(String.valueOf(body.getLength())));
                 hasBody = true;
             } catch (Exception e) {
                 System.out.println("No Body");
@@ -105,7 +105,7 @@ public class Response {
             headers.addHeader("Content-Type", new Header(contentType));
             try {
                 body = new Body(request.getId().getURI());
-                headers.addHeader("Content-Length", new Header(body.getLength()));
+                headers.addHeader("Content-Length", new Header(String.valueOf(body.getLength())));
                 hasBody = true;
             } catch (Exception e) {
                 System.out.println("No Body");
