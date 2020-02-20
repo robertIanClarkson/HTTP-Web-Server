@@ -16,7 +16,7 @@ public class Log {
     public static void newLog(Request request, Response response) throws IOException {
         FileWriter fileWriter = new FileWriter( Configuration.getHttpd().getLogFile(), true); //Set true for append mode
         PrintWriter printWriter = new PrintWriter(fileWriter);
-        printWriter.printf("%s - user [%s] %s %-30s %s %s %d\n",
+        printWriter.printf("%s - user [%s] \"%s %-25s %s\" %s %d\n",
                 request.getHeaders().getHeader("Host").getValue(),
                 response.getHeaders().getHeader("Date").getValue(),
                 request.getMethod().getVerb(),
