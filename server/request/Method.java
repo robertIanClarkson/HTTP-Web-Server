@@ -1,5 +1,6 @@
 package server.request;
 
+import server.request.exceptions.BadRequest;
 import server.response.StatusCode;
 
 import java.util.Arrays;
@@ -12,12 +13,11 @@ public class Method {
     );
     private String verb;
 
-    public Method(String verb) {
+    public Method(String verb) throws BadRequest {
         if(VERBS.contains(verb)) {
             this.verb = verb;
         } else {
-            Request.code = new StatusCode("400");
-//            throw new InvalidMethodException("\"" + verb + "\" is not a valid verb");
+            throw new BadRequest("Invalid Verb: " + verb);
         }
     }
 

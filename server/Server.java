@@ -1,13 +1,18 @@
 package server;
 
 import server.accessCheck.AccessCheck;
+import server.accessCheck.exceptions.Forbidden;
+import server.accessCheck.exceptions.Unauthorized;
 import server.configuration.ConfigError;
 import server.configuration.Configuration;
 import server.logs.Log;
 import server.request.Request;
+import server.request.exceptions.BadRequest;
+import server.request.exceptions.RequestError;
 import server.resource.Resource;
 import server.response.Response;
-import server.response.exception.ResponseError;
+import server.response.exception.InternalServerError;
+import server.response.exception.NotFound;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -15,37 +20,52 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    public Server() {
 
+    private ServerSocket socket;
+    private Socket client;
+
+    public Server() throws IOException, ConfigError {
+        new Configuration("conf/httpd.conf", "conf/mime.types");
+        new Resource();
+        new AccessCheck();
+        new Log();
+        socket = new ServerSocket( Configuration.getHttpd().getListen() );
+        client = null;
     }
 
-    public void start() {
-        try {
-            new Configuration("conf/httpd.conf", "conf/mime.types");
-            new Resource();
-            new AccessCheck();
-            new Log();
-            ServerSocket socket = new ServerSocket( Configuration.getHttpd().getListen() );
-            Socket client = null;
-
-            while( true ) {
-
+    public void start() throws IOException, ConfigError, BadRequest {
+        Request request = null;
+        Response response = null;
+        while( true ) {
+            try {
                 client = socket.accept();
-                Request request = new Request(client);
+                request = new Request(client);
                 Resource.handleURI(request);
                 AccessCheck.check(request);
-                Response response = new Response(request);
+                response = new Response(request);
+            } catch(IOException | InternalServerError e) {
+                System.out.println(e);
+                response = new Response("500");
+            } catch(BadRequest e) {
+                System.out.println(e);
+                response = new Response("400");
+            }  catch(Unauthorized e) {
+                System.out.println(e);
+                response = new Response("401");
+            } catch(Forbidden e) {
+                System.out.println(e);
+                response = new Response("403");
+            } catch(NotFound e) {
+                System.out.println(e);
+                response = new Response("404");
+            }  finally {
                 sendResponse(client, response);
                 client.close();
-                Log.newLog(request, response);
-                printRequest(request);
-                printStatusCode(request);
-                printResponse(response);
+//                Log.newLog(request, response);
+//                printRequest(request);
+//                printStatusCode(request);
+//                printResponse(response);
             }
-        } catch (IOException e) {
-            System.out.println("SocketError ---> " + e);
-        } catch (ConfigError e) {
-            System.out.println("ConfigError ---> " + e);
         }
     }
 

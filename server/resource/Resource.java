@@ -42,10 +42,6 @@ public class Resource {
             uri += Configuration.getHttpd().getDirectoryIndex();
         }
 
-        if(Files.notExists(Paths.get(uri))){
-            Request.code = new StatusCode("404");
-        }
-
         request.getId().setURI(uri);
     }
 }

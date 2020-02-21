@@ -1,5 +1,7 @@
 package server.accessCheck;
 
+import server.accessCheck.exceptions.Forbidden;
+import server.accessCheck.exceptions.Unauthorized;
 import server.configuration.Configuration;
 import server.request.Request;
 
@@ -20,18 +22,30 @@ public class AccessCheck {
         setUsernamePasswords();
     }
 
-    public static void check(Request request) {
+    public static void check(Request request) throws Unauthorized, Forbidden {
         if (accessExist(request.getId().getURI())) {
+            if (authHeader()) {
+                if (validUsernamePassword("user")) {
 
+                } else {
+                    throw new Forbidden("user");
+                }
+            } else {
+                throw new Unauthorized(request.getId().getURI());
+            }
         }
     }
 
-    public String getDirective(String key) {
-        return directives.get(key);
+    private static boolean authHeader() {
+        return true;
     }
 
     private static boolean accessExist(String uri) {
         return false;
+    }
+
+    private static boolean validUsernamePassword(String user) {
+        return true;
     }
 
     private void setDirectives() throws IOException {
@@ -42,6 +56,10 @@ public class AccessCheck {
             value = stripQuotes(line.substring(line.indexOf(" ")).trim());
             directives.put(key, value);
         }
+    }
+
+    public String getDirective(String key) {
+        return directives.get(key);
     }
 
     private void setUsernamePasswords() throws IOException {

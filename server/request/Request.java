@@ -1,5 +1,6 @@
 package server.request;
 
+import server.request.exceptions.BadRequest;
 import server.response.StatusCode;
 
 import java.io.BufferedReader;
@@ -18,7 +19,7 @@ public class Request {
     public static boolean hasBody;
     public static boolean hasScriptAlias;
 
-    public Request(Socket client) throws IOException {
+    public Request(Socket client) throws IOException, BadRequest {
         String bodyLength;
         hasBody = false;
         reader = new BufferedReader(
@@ -34,7 +35,7 @@ public class Request {
         }
     }
 
-    private void process(String line) {
+    private void process(String line) throws BadRequest {
         if (line != null) {
             String[] chunks = line.split(" ");
             if (chunks.length == 3) {
@@ -42,7 +43,7 @@ public class Request {
                 id = new Identifier(chunks[1]);
                 version = new Version(chunks[2]);
             } else {
-                code = new StatusCode("400");
+                throw new BadRequest("Missing Field: " + line);
             }
         }
     }

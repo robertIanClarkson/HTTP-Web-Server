@@ -1,9 +1,17 @@
 package server.response;
 
 import server.configuration.Configuration;
-import server.request.*;
+import server.request.Header;
+import server.request.Headers;
+import server.request.Request;
+import server.request.Version;
+import server.request.exceptions.BadRequest;
+import server.response.exception.InternalServerError;
+import server.response.exception.NotFound;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -19,7 +27,37 @@ public class Response {
 
     public static boolean hasBody;
 
-    public Response(Request request) throws IOException {
+    public Response(String error) throws BadRequest {
+        version = new Version("HTTP/1.1");
+        headers = new Headers();
+        headers.addHeader("Date", new Header(getServerTime()));
+        headers.addHeader("Server", new Header("Clarkson_&_Gao_Server"));
+
+        switch (error) {
+            case "500": // Internal Server Error
+                code = new StatusCode("500");
+                phrase = new Phrase(handlePhrase(code));
+                break;
+            case "400": // Bad Request
+                code = new StatusCode("400");
+                phrase = new Phrase(handlePhrase(code));
+                break;
+            case "401": // Unauthorized
+                code = new StatusCode("401");
+                phrase = new Phrase(handlePhrase(code));
+                break;
+            case "403": // Forbidden
+                code = new StatusCode("403");
+                phrase = new Phrase(handlePhrase(code));
+                break;
+            case "404": // not Found
+                code = new StatusCode("404");
+                phrase = new Phrase(handlePhrase(code));
+                break;
+        }
+    }
+
+    public Response(Request request) throws IOException, NotFound, InternalServerError {
         version = request.getVersion();
         code = request.getCode();
         phrase = new Phrase(handlePhrase(code));
@@ -74,42 +112,29 @@ public class Response {
     }
 
     private void handlePOST(Request request) {
-        if(code.getCode().equals("200")) {
-            headers.addHeader("Connection", new Header("close"));
-            headers.addHeader("WWW-Authenticate", new Header("Basic"));
-            String uri = request.getId().getURI();
-            String extension = uri.substring(uri.lastIndexOf(".") + 1);
-            String contentType = Configuration.getMime().getMimeType(extension);
-            headers.addHeader("Content-Type", new Header(contentType));
-            try {
-                body = new Body(request.getId().getURI());
-                headers.addHeader("Content-Length", new Header(String.valueOf(body.getLength())));
-                hasBody = true;
-            } catch (Exception e) {
-                System.out.println("No Body");
-            }
-        }
+
     }
 
-    private void handleGET(Request request) throws IOException {
-        if(code.getCode().equals("200")) {
-            if(Request.hasScriptAlias) {
-                if(!runScript(request)) {
-                    code = new StatusCode("500");
-                }
+    private void handleGET(Request request) throws IOException, NotFound, InternalServerError {
+        if(Request.hasScriptAlias) {
+            if(!runScript(request)) {
+                throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
             }
-            headers.addHeader("Connection", new Header("close"));
-            String uri = request.getId().getURI();
-            String extension = uri.substring(uri.lastIndexOf(".") + 1);
-            String contentType = Configuration.getMime().getMimeType(extension);
-            headers.addHeader("Content-Type", new Header(contentType));
-            try {
-                body = new Body(request.getId().getURI());
-                headers.addHeader("Content-Length", new Header(String.valueOf(body.getLength())));
-                hasBody = true;
-            } catch (Exception e) {
-                System.out.println("No Body");
-            }
+        }
+        headers.addHeader("Connection", new Header("close"));
+        String uri = request.getId().getURI();
+        if(Files.notExists(Paths.get(uri))){
+            throw new NotFound(uri);
+        }
+        String extension = uri.substring(uri.lastIndexOf(".") + 1);
+        String contentType = Configuration.getMime().getMimeType(extension);
+        headers.addHeader("Content-Type", new Header(contentType));
+        try {
+            body = new Body(request.getId().getURI());
+            headers.addHeader("Content-Length", new Header(String.valueOf(body.getLength())));
+            hasBody = true;
+        } catch (Exception e) {
+            System.out.println("No Body");
         }
     }
 

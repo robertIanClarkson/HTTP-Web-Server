@@ -1,5 +1,6 @@
 package server.request;
 
+import server.request.exceptions.BadRequest;
 import server.response.StatusCode;
 
 import java.io.BufferedReader;
@@ -24,7 +25,7 @@ public class Headers {
         headers = new HashMap<>();
     }
 
-    public Headers(BufferedReader reader) throws IOException {
+    public Headers(BufferedReader reader) throws IOException, BadRequest {
         Header header;
         String line, key, value;
         headers = new HashMap<>();
@@ -36,7 +37,7 @@ public class Headers {
             if(HEADERS.contains(key)) {
                 headers.put(key, header);
             } else {
-                Request.code = new StatusCode("400");
+                throw new BadRequest("Invalid HTTP Header: " + line);
             }
             line = reader.readLine();
         }
