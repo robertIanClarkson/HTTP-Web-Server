@@ -129,6 +129,8 @@ public class Response {
         } catch (Exception e) {
             System.out.println("No Body");
         }
+        code = new ResCode("200");
+        phrase = new ResPhrase(handlePhrase(code));
     }
 
     private String handlePhrase(ResCode code) {

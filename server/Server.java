@@ -70,11 +70,11 @@ public class Server {
                 }
                 try {
                     Log.newLog(request, response);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     System.out.println("Logging Error : " + e);
                 }
 //                printRequest(request);
-//                printStatusCode(request, response);
+                printStatusCode(request, response);
 //                printResponse(response);
 
             }
@@ -84,12 +84,7 @@ public class Server {
     private static void sendResponse(Socket client, Response response) throws IOException {
         /* https://stackoverflow.com/questions/1176135/socket-send-and-receive-byte-array */
         DataOutputStream out = new DataOutputStream(client.getOutputStream());
-        int length = response.toString().length();
-        if(Response.hasBody) {
-            length += response.getResponseBody().getLength();
-        }
         byte[] res = response.toString().getBytes();
-        out.writeInt(length); // write length of the message
         out.write(res);
         if(Response.hasBody) {
             out.write(response.getResponseBody().getBody());
