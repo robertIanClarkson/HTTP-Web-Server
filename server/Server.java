@@ -32,7 +32,7 @@ public class Server {
         client = null;
     }
 
-    public void start() throws  ConfigError, BadRequest {
+    public void start() throws  ConfigError {
         Request request = null;
         Response response = null;
         while( true ) {
@@ -60,14 +60,23 @@ public class Server {
             }  finally {
                 try {
                     sendResponse(client, response);
-                    client.close();
-//                Log.newLog(request, response);
-//                printRequest(request);
-//                printStatusCode(request);
-//                printResponse(response);
                 } catch (IOException e) {
-                    System.out.println(e);
+                    System.out.println("sendResponse Error : " + e);
                 }
+                try {
+                    client.close();
+                } catch (IOException e) {
+                    System.out.println("client.close Error : " + e);
+                }
+                try {
+                    Log.newLog(request, response);
+                } catch (IOException e) {
+                    System.out.println("Logging Error : " + e);
+                }
+//                printRequest(request);
+//                printStatusCode(request, response);
+//                printResponse(response);
+
             }
         }
     }
@@ -77,13 +86,13 @@ public class Server {
         DataOutputStream out = new DataOutputStream(client.getOutputStream());
         int length = response.toString().length();
         if(Response.hasBody) {
-            length += response.getBody().getLength();
+            length += response.getResponseBody().getLength();
         }
         byte[] res = response.toString().getBytes();
         out.writeInt(length); // write length of the message
         out.write(res);
         if(Response.hasBody) {
-            out.write(response.getBody().getBody());
+            out.write(response.getResponseBody().getBody());
             out.close();
         }
     }
@@ -98,9 +107,9 @@ public class Server {
         }
     }
 
-    private static void printStatusCode(Request request) {
+    private static void printStatusCode(Request request, Response response) {
         System.out.println("------------Code-------------");
-        System.out.printf("%-3s---> %s\n", request.getCode(), request.getId());
+        System.out.printf("%-3s---> %s\n", response.getCode(), request.getId());
     }
 
     private static void printResponse(Response response) {

@@ -1,11 +1,7 @@
 package server.response;
 
 import server.configuration.Configuration;
-import server.request.Header;
-import server.request.Headers;
 import server.request.Request;
-import server.request.Version;
-import server.request.exceptions.BadRequest;
 import server.response.exception.InternalServerError;
 import server.response.exception.NotFound;
 
@@ -19,19 +15,19 @@ import java.util.TimeZone;
 
 public class Response {
 
-    private Version version;
+    private ResponseVersion version;
     private StatusCode code;
     private Phrase phrase;
-    private Headers headers;
-    private Body body;
+    private ResponseHeaders headers;
+    private ResponseBody body;
 
     public static boolean hasBody;
 
-    public Response(String error) throws BadRequest {
-        version = new Version("HTTP/1.1");
-        headers = new Headers();
-        headers.addHeader("Date", new Header(getServerTime()));
-        headers.addHeader("Server", new Header("Clarkson_&_Gao_Server"));
+    public Response(String error) {
+        headers = new ResponseHeaders();
+        version = new ResponseVersion("HTTP/1.1");
+        headers.addHeader("Date", getServerTime());
+        headers.addHeader("Server", "Clarkson_&_Gao_Server");
 
         switch (error) {
             case "500": // Internal Server Error
@@ -58,12 +54,10 @@ public class Response {
     }
 
     public Response(Request request) throws IOException, NotFound, InternalServerError {
-        version = request.getVersion();
-        code = request.getCode();
-        phrase = new Phrase(handlePhrase(code));
-        headers = new Headers();
-        headers.addHeader("Date", new Header(getServerTime()));
-        headers.addHeader("Server", new Header("Clarkson_&_Gao_Server"));
+        headers = new ResponseHeaders();
+        version = new ResponseVersion(request.getRequestVersion().getVersion());
+        headers.addHeader("Date", getServerTime());
+        headers.addHeader("Server", "Clarkson_&_Gao_Server");
         hasBody = false;
         switch (request.getMethod().getVerb()) {
             case "GET" :
@@ -121,17 +115,16 @@ public class Response {
                 throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
             }
         }
-        headers.addHeader("Connection", new Header("close"));
+        headers.addHeader("Connection", "close");
         String uri = request.getId().getURI();
         if(Files.notExists(Paths.get(uri))){
             throw new NotFound(uri);
         }
         String extension = uri.substring(uri.lastIndexOf(".") + 1);
-        String contentType = Configuration.getMime().getMimeType(extension);
-        headers.addHeader("Content-Type", new Header(contentType));
+        headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
         try {
-            body = new Body(request.getId().getURI());
-            headers.addHeader("Content-Length", new Header(String.valueOf(body.getLength())));
+            body = new ResponseBody(request.getId().getURI());
+            headers.addHeader("Content-Length", String.valueOf(body.getLength()));
             hasBody = true;
         } catch (Exception e) {
             System.out.println("No Body");
@@ -187,23 +180,15 @@ public class Response {
         return false;
     }
 
-    public Version getVersion() {
-        return version;
-    }
-
     public StatusCode getCode() {
         return code;
     }
 
-    public Phrase getPhrase() {
-        return phrase;
-    }
-
-    public Headers getHeaders() {
+    public ResponseHeaders getResponseHeaders() {
         return headers;
     }
 
-    public Body getBody() {
+    public ResponseBody getResponseBody() {
         return body;
     }
 
@@ -214,7 +199,6 @@ public class Response {
         response += code;
         response += phrase;
         response += headers;
-//        server.response += body;
         return response;
     }
 }

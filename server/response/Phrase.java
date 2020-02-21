@@ -8,10 +8,6 @@ public class Phrase {
         this.phrase = phrase;
     }
 
-    public String getPhrase() {
-        return phrase;
-    }
-
     @Override
     public String toString() {
         return (phrase + "\r\n");

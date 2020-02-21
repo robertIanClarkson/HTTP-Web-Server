@@ -2,11 +2,11 @@ package server.request;
 
 import java.io.*;
 
-public class Body {
+public class RequestBody {
 
     private byte[] body;
 
-    public Body(InputStream is, int length) throws IOException {
+    public RequestBody(InputStream is, int length) throws IOException {
         body = new byte[length];
         body = is.readNBytes(length);
     }

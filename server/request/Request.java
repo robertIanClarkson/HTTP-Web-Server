@@ -1,7 +1,6 @@
 package server.request;
 
 import server.request.exceptions.BadRequest;
-import server.response.StatusCode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,10 +11,9 @@ public class Request {
     private BufferedReader reader;
     private Method method;
     private Identifier id;
-    private Version version;
-    private Headers headers;
-    private Body body;
-    public static StatusCode code;
+    private RequestVersion requestVersion;
+    private RequestHeaders requestHeaders;
+    private RequestBody requestBody;
     public static boolean hasBody;
     public static boolean hasScriptAlias;
 
@@ -25,12 +23,11 @@ public class Request {
         reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
         );
-        code = new StatusCode("200");
         process(reader.readLine());
-        headers = new Headers(reader);
-        if (headers.hasBody()) {
-            bodyLength = headers.getHeader("Content-Length").getValue();
-            body = new Body(client.getInputStream(), Integer.parseInt(bodyLength));
+        requestHeaders = new RequestHeaders(reader);
+        if (requestHeaders.hasBody()) {
+            bodyLength = requestHeaders.getHeader("Content-Length");
+            requestBody = new RequestBody(client.getInputStream(), Integer.parseInt(bodyLength));
             hasBody = true;
         }
     }
@@ -41,23 +38,11 @@ public class Request {
             if (chunks.length == 3) {
                 method = new Method(chunks[0]);
                 id = new Identifier(chunks[1]);
-                version = new Version(chunks[2]);
+                requestVersion = new RequestVersion(chunks[2]);
             } else {
                 throw new BadRequest("Missing Field: " + line);
             }
         }
-    }
-
-    private boolean isMethod(String line) {
-        return (line.contains("GET") ||
-                line.contains("HEAD") ||
-                line.contains("POST") ||
-                line.contains("PUT") ||
-                line.contains("DELETE") ||
-                line.contains("TRACE") ||
-                line.contains("OPTIONS") ||
-                line.contains("CONNECT") ||
-                line.contains("PATCH"));
     }
 
     public Method getMethod() {
@@ -68,20 +53,16 @@ public class Request {
         return id;
     }
 
-    public Version getVersion() {
-        return version;
+    public RequestVersion getRequestVersion() {
+        return requestVersion;
     }
 
-    public Headers getHeaders() {
-        return headers;
+    public RequestHeaders getRequestHeaders() {
+        return requestHeaders;
     }
 
-    public Body getBody() {
-        return body;
-    }
-
-    public StatusCode getCode() {
-        return code;
+    public RequestBody getRequestBody() {
+        return requestBody;
     }
 
     @Override
@@ -89,8 +70,8 @@ public class Request {
         String request = "";
         request += method;
         request += id.getOriginalURI() + " ";
-        request += version.getVersion() + "\r\n";
-        request += headers;
+        request += requestVersion.getVersion() + "\r\n";
+        request += requestHeaders;
         return request;
     }
 }

@@ -1,12 +1,11 @@
 package server.request;
 
 import server.request.exceptions.BadRequest;
-import server.response.StatusCode;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Version {
+public class RequestVersion {
 
     private static List<String> VERSIONS = Arrays.asList(
             "HTTP/1.1"
@@ -14,7 +13,7 @@ public class Version {
 
     private String version;
 
-    public Version(String version) throws BadRequest {
+    public RequestVersion(String version) throws BadRequest {
         if(VERSIONS.contains(version)) {
             this.version = version;
         } else {

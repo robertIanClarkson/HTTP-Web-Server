@@ -1,7 +1,6 @@
 package server.request;
 
 import server.request.exceptions.BadRequest;
-import server.response.StatusCode;
 
 import java.util.Arrays;
 import java.util.List;
