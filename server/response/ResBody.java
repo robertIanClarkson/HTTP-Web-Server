@@ -5,11 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class ResponseBody {
+public class ResBody {
 
     private byte[] body;
 
-    public ResponseBody(String uri) throws IOException {
+    public ResBody(String uri) throws IOException {
         File file = new File(uri);
         body = Files.readAllBytes(file.toPath());
     }

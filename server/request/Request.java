@@ -9,11 +9,11 @@ import java.net.Socket;
 
 public class Request {
     private BufferedReader reader;
-    private Method method;
-    private Identifier id;
-    private RequestVersion requestVersion;
-    private RequestHeaders requestHeaders;
-    private RequestBody requestBody;
+    private ReqMethod method;
+    private ReqIdentifier id;
+    private ReqVersion requestVersion;
+    private ReqHeaders requestHeaders;
+    private ReqBody requestBody;
     public static boolean hasBody;
     public static boolean hasScriptAlias;
 
@@ -24,10 +24,10 @@ public class Request {
                 new InputStreamReader( client.getInputStream() )
         );
         process(reader.readLine());
-        requestHeaders = new RequestHeaders(reader);
+        requestHeaders = new ReqHeaders(reader);
         if (requestHeaders.hasBody()) {
             bodyLength = requestHeaders.getHeader("Content-Length");
-            requestBody = new RequestBody(client.getInputStream(), Integer.parseInt(bodyLength));
+            requestBody = new ReqBody(client.getInputStream(), Integer.parseInt(bodyLength));
             hasBody = true;
         }
     }
@@ -36,32 +36,32 @@ public class Request {
         if (line != null) {
             String[] chunks = line.split(" ");
             if (chunks.length == 3) {
-                method = new Method(chunks[0]);
-                id = new Identifier(chunks[1]);
-                requestVersion = new RequestVersion(chunks[2]);
+                method = new ReqMethod(chunks[0]);
+                id = new ReqIdentifier(chunks[1]);
+                requestVersion = new ReqVersion(chunks[2]);
             } else {
                 throw new BadRequest("Missing Field: " + line);
             }
         }
     }
 
-    public Method getMethod() {
+    public ReqMethod getMethod() {
         return method;
     }
 
-    public Identifier getId() {
+    public ReqIdentifier getId() {
         return id;
     }
 
-    public RequestVersion getRequestVersion() {
+    public ReqVersion getRequestVersion() {
         return requestVersion;
     }
 
-    public RequestHeaders getRequestHeaders() {
+    public ReqHeaders getRequestHeaders() {
         return requestHeaders;
     }
 
-    public RequestBody getRequestBody() {
+    public ReqBody getRequestBody() {
         return requestBody;
     }
 

@@ -5,14 +5,14 @@ import server.request.exceptions.BadRequest;
 import java.util.Arrays;
 import java.util.List;
 
-public class Method {
+public class ReqMethod {
 
     private static List<String> VERBS = Arrays.asList(
             "GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "OPTIONS", "CONNECT", "PATCH"
     );
     private String verb;
 
-    public Method(String verb) throws BadRequest {
+    public ReqMethod(String verb) throws BadRequest {
         if(VERBS.contains(verb)) {
             this.verb = verb;
         } else {

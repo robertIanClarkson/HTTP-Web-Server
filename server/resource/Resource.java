@@ -2,7 +2,7 @@ package server.resource;
 
 import server.configuration.ConfigError;
 import server.configuration.Configuration;
-import server.request.Query;
+import server.request.ReqQuery;
 import server.request.Request;
 
 public class Resource {
@@ -10,7 +10,7 @@ public class Resource {
     public Resource() { }
 
     public static void handleURI(Request request) throws ConfigError {
-        Query query;
+        ReqQuery query;
         String uri;
         try {
             uri = request.getId().getURI();
@@ -19,7 +19,7 @@ public class Resource {
             return;
         }
         if(uri.contains("?")) {
-            query = new Query( uri.substring(uri.lastIndexOf("?") + 1) );
+            query = new ReqQuery( uri.substring(uri.lastIndexOf("?") + 1) );
             uri = uri.substring(0, uri.indexOf("?"));
             request.getId().setQuery(query);
 

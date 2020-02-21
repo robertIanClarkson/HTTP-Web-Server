@@ -15,47 +15,47 @@ import java.util.TimeZone;
 
 public class Response {
 
-    private ResponseVersion version;
-    private StatusCode code;
-    private Phrase phrase;
-    private ResponseHeaders headers;
-    private ResponseBody body;
+    private ResVersion version;
+    private ResCode code;
+    private ResPhrase phrase;
+    private ResHeaders headers;
+    private ResBody body;
 
     public static boolean hasBody;
 
     public Response(String error) {
-        headers = new ResponseHeaders();
-        version = new ResponseVersion("HTTP/1.1");
+        headers = new ResHeaders();
+        version = new ResVersion("HTTP/1.1");
         headers.addHeader("Date", getServerTime());
         headers.addHeader("Server", "Clarkson_&_Gao_Server");
 
         switch (error) {
             case "500": // Internal Server Error
-                code = new StatusCode("500");
-                phrase = new Phrase(handlePhrase(code));
+                code = new ResCode("500");
+                phrase = new ResPhrase(handlePhrase(code));
                 break;
             case "400": // Bad Request
-                code = new StatusCode("400");
-                phrase = new Phrase(handlePhrase(code));
+                code = new ResCode("400");
+                phrase = new ResPhrase(handlePhrase(code));
                 break;
             case "401": // Unauthorized
-                code = new StatusCode("401");
-                phrase = new Phrase(handlePhrase(code));
+                code = new ResCode("401");
+                phrase = new ResPhrase(handlePhrase(code));
                 break;
             case "403": // Forbidden
-                code = new StatusCode("403");
-                phrase = new Phrase(handlePhrase(code));
+                code = new ResCode("403");
+                phrase = new ResPhrase(handlePhrase(code));
                 break;
             case "404": // not Found
-                code = new StatusCode("404");
-                phrase = new Phrase(handlePhrase(code));
+                code = new ResCode("404");
+                phrase = new ResPhrase(handlePhrase(code));
                 break;
         }
     }
 
     public Response(Request request) throws IOException, NotFound, InternalServerError {
-        headers = new ResponseHeaders();
-        version = new ResponseVersion(request.getRequestVersion().getVersion());
+        headers = new ResHeaders();
+        version = new ResVersion(request.getRequestVersion().getVersion());
         headers.addHeader("Date", getServerTime());
         headers.addHeader("Server", "Clarkson_&_Gao_Server");
         hasBody = false;
@@ -123,7 +123,7 @@ public class Response {
         String extension = uri.substring(uri.lastIndexOf(".") + 1);
         headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
         try {
-            body = new ResponseBody(request.getId().getURI());
+            body = new ResBody(request.getId().getURI());
             headers.addHeader("Content-Length", String.valueOf(body.getLength()));
             hasBody = true;
         } catch (Exception e) {
@@ -131,7 +131,7 @@ public class Response {
         }
     }
 
-    private String handlePhrase(StatusCode code) {
+    private String handlePhrase(ResCode code) {
         switch(code.getCode()) {
             case "200" :
                 return "OK";
@@ -180,15 +180,15 @@ public class Response {
         return false;
     }
 
-    public StatusCode getCode() {
+    public ResCode getCode() {
         return code;
     }
 
-    public ResponseHeaders getResponseHeaders() {
+    public ResHeaders getResponseHeaders() {
         return headers;
     }
 
-    public ResponseBody getResponseBody() {
+    public ResBody getResponseBody() {
         return body;
     }
 

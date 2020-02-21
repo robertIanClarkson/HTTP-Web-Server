@@ -1,9 +1,9 @@
 package server.response;
 
-public class ResponseVersion {
+public class ResVersion {
     private String version;
 
-    public ResponseVersion(String version) {
+    public ResVersion(String version) {
         this.version = version;
     }
 

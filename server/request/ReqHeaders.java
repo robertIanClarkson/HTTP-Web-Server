@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class RequestHeaders {
+public class ReqHeaders {
 
     private static List<String> HEADERS = Arrays.asList(
             "Host", "Connection", "Cache-Control", "DNT", "Upgrade-Insecure-Requests",
@@ -20,7 +20,7 @@ public class RequestHeaders {
     );
     private HashMap<String, String> headers;
 
-    public RequestHeaders(BufferedReader reader) throws IOException, BadRequest {
+    public ReqHeaders(BufferedReader reader) throws IOException, BadRequest {
         String line, key, value;
         headers = new HashMap<>();
         line = reader.readLine();

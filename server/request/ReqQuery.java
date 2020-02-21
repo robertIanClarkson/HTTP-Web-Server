@@ -1,10 +1,10 @@
 package server.request;
 
-public class Query {
+public class ReqQuery {
 
     private String query;
 
-    public Query(String query) {
+    public ReqQuery(String query) {
         this.query = query;
     }
 

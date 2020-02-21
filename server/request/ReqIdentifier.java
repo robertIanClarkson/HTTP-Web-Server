@@ -1,12 +1,12 @@
 package server.request;
 
-public class Identifier {
+public class ReqIdentifier {
 
     private String uri, originalURI;
-    private Query query;
+    private ReqQuery query;
     private boolean hasQuery;
 
-    public Identifier(String uri) {
+    public ReqIdentifier(String uri) {
         originalURI = uri;
         hasQuery = false;
         if(uri.isEmpty()) {
@@ -24,11 +24,11 @@ public class Identifier {
         this.uri = uri;
     }
 
-    public Query getQuery() {
+    public ReqQuery getQuery() {
         return query;
     }
 
-    public void setQuery(Query query) {
+    public void setQuery(ReqQuery query) {
         this.query = query;
         hasQuery = true;
     }

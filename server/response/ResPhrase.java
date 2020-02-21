@@ -1,10 +1,10 @@
 package server.response;
 
-public class Phrase {
+public class ResPhrase {
 
     private String phrase;
 
-    public Phrase(String phrase) {
+    public ResPhrase(String phrase) {
         this.phrase = phrase;
     }
 

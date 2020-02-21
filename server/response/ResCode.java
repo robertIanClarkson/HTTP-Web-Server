@@ -1,10 +1,10 @@
 package server.response;
 
-public class StatusCode {
+public class ResCode {
 
     private String code;
 
-    public StatusCode(String code) {
+    public ResCode(String code) {
         this.code = code;
     }
 

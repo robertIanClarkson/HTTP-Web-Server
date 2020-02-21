@@ -2,10 +2,10 @@ package server.response;
 
 import java.util.HashMap;
 
-public class ResponseHeaders {
+public class ResHeaders {
     private HashMap<String, String> headers;
 
-    public ResponseHeaders() {
+    public ResHeaders() {
         headers = new HashMap<>();
     }
 
