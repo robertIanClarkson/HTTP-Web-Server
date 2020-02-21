@@ -88,8 +88,8 @@ public class Server {
         out.write(res);
         if(Response.hasBody) {
             out.write(response.getResponseBody().getBody());
-            out.close();
         }
+        out.close();
     }
 
     private static void printRequest(Request request) {
