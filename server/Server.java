@@ -8,7 +8,6 @@ import server.configuration.Configuration;
 import server.logs.Log;
 import server.request.Request;
 import server.request.exceptions.BadRequest;
-import server.request.exceptions.RequestError;
 import server.resource.Resource;
 import server.response.Response;
 import server.response.exception.InternalServerError;
@@ -33,7 +32,7 @@ public class Server {
         client = null;
     }
 
-    public void start() throws IOException, ConfigError, BadRequest {
+    public void start() throws  ConfigError, BadRequest {
         Request request = null;
         Response response = null;
         while( true ) {
@@ -59,12 +58,16 @@ public class Server {
                 System.out.println(e);
                 response = new Response("404");
             }  finally {
-                sendResponse(client, response);
-                client.close();
+                try {
+                    sendResponse(client, response);
+                    client.close();
 //                Log.newLog(request, response);
 //                printRequest(request);
 //                printStatusCode(request);
 //                printResponse(response);
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
             }
         }
     }
