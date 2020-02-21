@@ -1,8 +1,8 @@
 package server;
 
-import server.accessCheck.AccessCheck;
-import server.accessCheck.exceptions.Forbidden;
-import server.accessCheck.exceptions.Unauthorized;
+import server.access_check.AccessCheck;
+import server.access_check.exceptions.Forbidden;
+import server.access_check.exceptions.Unauthorized;
 import server.configuration.ConfigError;
 import server.configuration.Configuration;
 import server.logs.Log;
