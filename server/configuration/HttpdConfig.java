@@ -15,7 +15,7 @@ public class HttpdConfig {
         directoryIndex = lines.getDirective("DirectoryIndex");
         logFile = lines.getDirective("LogFile");
         listen = Integer.parseInt(lines.getDirective("Listen"));
-        accessFile = lines.getDirective("AccessFileName");
+        accessFile = lines.getDirective("AccessFile");
     }
 
     public String getAccessFile() {
