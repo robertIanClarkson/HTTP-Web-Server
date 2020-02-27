@@ -16,10 +16,12 @@ public class Log {
         if(Response.hasBody) {
             bodyLength = String.valueOf(response.getResponseBody().getLength());
         }
+        String user = "-";
         FileWriter fileWriter = new FileWriter( Configuration.getHttpd().getLogFile(), true); //Set true for append mode
         PrintWriter printWriter = new PrintWriter(fileWriter);
-        printWriter.printf("%s - user [%s] \"%s %-25s %s\" %s %s\n",
+        printWriter.printf("%s - %s [%s] \"%s %-25s %s\" %s %s\n",
                 request.getRequestHeaders().getHeader("Host"),
+                user,
                 response.getResponseHeaders().getHeader("Date"),
                 request.getMethod().getVerb(),
                 request.getId().getOriginalURI(),
