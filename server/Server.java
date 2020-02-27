@@ -12,6 +12,7 @@ import server.resource.Resource;
 import server.response.Response;
 import server.response.exception.InternalServerError;
 import server.response.exception.NotFound;
+import server.worker.Worker;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class Server {
         Response response = null;
         while( true ) {
             try {
+//                new Worker(socket.accept());
                 client = socket.accept();
                 request = new Request(client);
                 Resource.handleURI(request);
@@ -83,6 +85,7 @@ public class Server {
 
     private static void sendResponse(Socket client, Response response) throws IOException {
         /* https://stackoverflow.com/questions/1176135/socket-send-and-receive-byte-array */
+        /* https://mkyong.com/java/how-to-send-http-request-getpost-in-java/ */
         DataOutputStream out = new DataOutputStream(client.getOutputStream());
         byte[] res = response.toString().getBytes();
         out.write(res);
