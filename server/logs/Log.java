@@ -13,7 +13,7 @@ public class Log {
 
     public static void newLog(Request request, Response response) throws IOException {
         String bodyLength = "-";
-        if(Response.hasBody) {
+        if(response.hasBody()) {
             bodyLength = String.valueOf(response.getResponseBody().getLength());
         }
         String user = "-";

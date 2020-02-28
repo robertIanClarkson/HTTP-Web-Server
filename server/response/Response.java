@@ -21,8 +21,6 @@ public class Response {
     private ResHeaders headers;
     private ResBody body;
 
-    public static boolean hasBody;
-
     public Response(String error) {
         headers = new ResHeaders();
         version = new ResVersion("HTTP/1.1");
@@ -59,7 +57,6 @@ public class Response {
         version = new ResVersion(request.getRequestVersion().getVersion());
         headers.addHeader("Date", getServerTime());
         headers.addHeader("Server", "Clarkson_&_Gao_Server");
-        hasBody = false;
         switch (request.getMethod().getVerb()) {
             case "GET" :
                 handleGET(request);
@@ -126,7 +123,6 @@ public class Response {
         try {
             body = new ResBody(request.getId().getURI());
             headers.addHeader("Content-Length", String.valueOf(body.getLength()));
-            hasBody = true;
         } catch (Exception e) {
             System.out.println("Notice: Response.handleGet --> No Body");
         }
@@ -193,6 +189,10 @@ public class Response {
 
     public ResBody getResponseBody() {
         return body;
+    }
+
+    public boolean hasBody() {
+        return (body != null);
     }
 
     @Override

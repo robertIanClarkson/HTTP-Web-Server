@@ -22,7 +22,7 @@ public class ServerDebug {
     static void printResponse(Response response) {
         System.out.println("------------Response------------");
         System.out.println(response);
-        if(Response.hasBody) {
+        if(response.hasBody()) {
 //            System.out.println("***+++HAS BODY+++***");
 //            String body = new String(server.response.getBody().getBody(), StandardCharsets.US_ASCII);
 //            System.out.println(body);

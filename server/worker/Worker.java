@@ -56,12 +56,12 @@ public class Worker extends Thread implements Runnable {
                 sender = new Sender();
                 sender.sendResponse(client, response);
             } catch (IOException | NullPointerException e) {
-                System.out.println("Error: Worker.run --> " + e);
+                System.out.println("Error: Worker.run.sendResponse --> " + e);
             }
             try {
                 client.close();
             } catch (IOException e) {
-                System.out.println("Error: Worker.run --> " + e);
+                System.out.println("Error: Worker.run.close --> " + e);
             }
 //            try {
 //                Log.newLog(request, response);

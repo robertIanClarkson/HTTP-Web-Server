@@ -13,7 +13,7 @@ public class Sender {
         DataOutputStream out = new DataOutputStream(client.getOutputStream());
         byte[] res = response.toString().getBytes();
         out.write(res);
-        if(Response.hasBody) {
+        if(response.hasBody()) {
             out.write(response.getResponseBody().getBody());
         }
         out.flush();
