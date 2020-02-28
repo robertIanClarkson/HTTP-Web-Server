@@ -14,12 +14,10 @@ public class Request {
     private ReqVersion requestVersion;
     private ReqHeaders requestHeaders;
     private ReqBody requestBody;
-    public static boolean hasBody;
-    public static boolean hasScriptAlias;
+    private boolean hasScriptAlias;
 
     public Request(Socket client) throws IOException, BadRequest {
         String bodyLength;
-        hasBody = false;
         reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
         );
@@ -28,7 +26,6 @@ public class Request {
         if (requestHeaders.hasBody()) {
             bodyLength = requestHeaders.getHeader("Content-Length");
             requestBody = new ReqBody(client.getInputStream(), Integer.parseInt(bodyLength));
-            hasBody = true;
         }
     }
 
@@ -65,6 +62,18 @@ public class Request {
 
     public ReqBody getRequestBody() {
         return requestBody;
+    }
+
+    public boolean hasBody() {
+        return (requestBody != null);
+    }
+
+    public void hasScriptAlias(boolean hasScriptAlias) {
+        this.hasScriptAlias = hasScriptAlias;
+    }
+
+    public boolean hasScriptAlias() {
+        return this.hasScriptAlias;
     }
 
     @Override

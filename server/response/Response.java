@@ -108,7 +108,7 @@ public class Response {
     }
 
     private void handleGET(Request request) throws IOException, NotFound, InternalServerError {
-        if(Request.hasScriptAlias) {
+        if(request.hasScriptAlias()) {
             if(!runScript(request)) {
                 throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
             }

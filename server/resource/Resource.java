@@ -29,7 +29,7 @@ public class Resource {
             uri = Configuration.getHttpd().getAlias(uri);
         } else if(Configuration.getHttpd().isScriptAlias(uri)) {
             uri = Configuration.getHttpd().getScriptAlias(uri);
-            Request.hasScriptAlias = true;
+            request.hasScriptAlias(true);
         } else {
             uri = Configuration.getHttpd().getDocumentRoot() + uri.substring(1);
         }

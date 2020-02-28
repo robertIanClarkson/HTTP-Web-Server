@@ -7,7 +7,7 @@ public class ServerDebug {
     static void printRequest(Request request) {
         System.out.println("------------Request-------------");
         System.out.println(request);
-        if(Request.hasBody) {
+        if(request.hasBody()) {
             System.out.println("***+++HAS BODY+++***");
 //            String body = new String(server.request.getBody().getBody(), StandardCharsets.US_ASCII);
 //            System.out.println(body);
