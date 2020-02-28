@@ -28,6 +28,7 @@ public class Worker extends Thread implements Runnable {
         Response response = null;
         Resource resource = null;
         AccessCheck accessCheck = null;
+        Sender sender = null;
         try {
             request = new Request(client);
             resource = new Resource();
@@ -52,7 +53,8 @@ public class Worker extends Thread implements Runnable {
             response = new Response("404");
         }  finally {
             try {
-                Sender.sendResponse(client, response);
+                sender = new Sender();
+                sender.sendResponse(client, response);
             } catch (IOException | NullPointerException e) {
                 System.out.println("sendResponse Error : " + e);
             }
@@ -61,14 +63,14 @@ public class Worker extends Thread implements Runnable {
             } catch (IOException e) {
                 System.out.println("client.close Error : " + e);
             }
-            try {
-                Log.newLog(request, response);
-            } catch (Exception e) {
-                System.out.println("Logging Error : " + e);
-            }
-            ServerDebug.printRequest(request);
+//            try {
+//                Log.newLog(request, response);
+//            } catch (Exception e) {
+//                System.out.println("Logging Error : " + e);
+//            }
+//            ServerDebug.printRequest(request);
 //            ServerDebug.printStatusCode(request, response);
-            ServerDebug.printResponse(response);
+//            ServerDebug.printResponse(response);
         }
     }
 

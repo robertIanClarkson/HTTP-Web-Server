@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Sender {
-    static void sendResponse(Socket client, Response response) throws IOException {
+    public void sendResponse(Socket client, Response response) throws IOException {
         /* https://stackoverflow.com/questions/1176135/socket-send-and-receive-byte-array */
         /* https://mkyong.com/java/how-to-send-http-request-getpost-in-java/ */
         DataOutputStream out = new DataOutputStream(client.getOutputStream());
@@ -16,6 +16,6 @@ public class Sender {
         if(Response.hasBody) {
             out.write(response.getResponseBody().getBody());
         }
-        out.close();
+        out.flush();
     }
 }
