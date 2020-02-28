@@ -42,6 +42,8 @@ public class Request {
             } else {
                 throw new BadRequest("Missing Field: " + line);
             }
+        } else {
+            throw new BadRequest("null request");
         }
     }
 
