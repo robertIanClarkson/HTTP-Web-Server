@@ -40,6 +40,10 @@ public class ReqHeaders {
         return headers.containsKey("Content-Length");
     }
 
+    public boolean hasHeader(String key) {
+        return headers.containsKey(key);
+    }
+
     public String getHeader(String key) {
         return headers.get(key);
     }
