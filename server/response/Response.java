@@ -41,6 +41,7 @@ public class Response {
             case "401": // Unauthorized
                 code = new ResCode("401");
                 phrase = new ResPhrase(handlePhrase(code));
+                headers.addHeader("WWW-Authenticate", "Basic");
                 break;
             case "403": // Forbidden
                 code = new ResCode("403");
