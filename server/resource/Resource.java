@@ -9,7 +9,7 @@ public class Resource {
 
     public Resource() { }
 
-    public static void handleURI(Request request) throws ConfigError {
+    public void handleURI(Request request) throws ConfigError {
         ReqQuery query;
         String uri;
         try {

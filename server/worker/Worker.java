@@ -26,10 +26,14 @@ public class Worker extends Thread implements Runnable {
     public void run() {
         Request request = null;
         Response response = null;
+        Resource resource = null;
+        AccessCheck accessCheck = null;
         try {
             request = new Request(client);
-            Resource.handleURI(request);
-            AccessCheck.check(request);
+            resource = new Resource();
+            resource.handleURI(request);
+            accessCheck = new AccessCheck();
+            accessCheck.check(request);
             response = new Response(request);
         } catch(IOException | InternalServerError | ConfigError e) {
             System.out.println(e);
@@ -62,9 +66,9 @@ public class Worker extends Thread implements Runnable {
             } catch (Exception e) {
                 System.out.println("Logging Error : " + e);
             }
-//            ServerDebug.printRequest(request);
+            ServerDebug.printRequest(request);
 //            ServerDebug.printStatusCode(request, response);
-//            ServerDebug.printResponse(response);
+            ServerDebug.printResponse(response);
         }
     }
 
