@@ -15,7 +15,7 @@ public class Resource {
         try {
             uri = request.getId().getURI();
         } catch (NullPointerException e) {
-            System.out.println(e);
+            System.out.println("Error: Resource.handleURI --> " + e);
             return;
         }
         if(uri.contains("?")) {

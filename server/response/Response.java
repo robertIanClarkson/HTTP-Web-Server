@@ -128,7 +128,7 @@ public class Response {
             headers.addHeader("Content-Length", String.valueOf(body.getLength()));
             hasBody = true;
         } catch (Exception e) {
-            System.out.println("No Body");
+            System.out.println("Notice: Response.handleGet --> No Body");
         }
         code = new ResCode("200");
         phrase = new ResPhrase(handlePhrase(code));
@@ -178,7 +178,7 @@ public class Response {
             System.out.println(process.exitValue());
             return true;
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Error: Response.runScript --> " + e);
         }
         return false;
     }
