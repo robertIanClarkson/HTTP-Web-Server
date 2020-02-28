@@ -1,0 +1,4 @@
+AuthUserFile "/Users/Robin/Desktop/Spring_2020/web-server-spring-2020-web-server-gao-clarkson/server/public_html/.htpasswd"
+AuthType Basic
+AuthName "I Challenge You"
+Require valid-user
