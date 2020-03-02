@@ -6,9 +6,11 @@ public class ReqBody {
 
     private byte[] body;
 
-    public ReqBody(InputStream is, int length) throws IOException {
+    public ReqBody(BufferedReader reader, int length) throws IOException {
         body = new byte[length];
-        body = is.readNBytes(length);
+        for(int i = 0; i < length; i++) {
+            body[i] = (byte) reader.read();
+        }
     }
 
     public byte[] getBody() {
