@@ -49,6 +49,10 @@ public class ReqHeaders {
         return headers.get(key);
     }
 
+    public HashMap<String, String> getHeaders() {
+        return headers;
+    }
+
     @Override
     public String toString() {
         String format = "";
