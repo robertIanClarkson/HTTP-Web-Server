@@ -29,10 +29,9 @@ public class Response {
         headers.addHeader("Server", "Clarkson_&_Gao_Server");
 
         switch (error) {
-            case "500": // Internal Server Error
-                code = new ResCode("500");
+            case "304":
+                code = new ResCode("304");
                 phrase = new ResPhrase(handlePhrase(code));
-                break;
             case "400": // Bad Request
                 code = new ResCode("400");
                 phrase = new ResPhrase(handlePhrase(code));
@@ -48,6 +47,10 @@ public class Response {
                 break;
             case "404": // not Found
                 code = new ResCode("404");
+                phrase = new ResPhrase(handlePhrase(code));
+                break;
+            case "500": // Internal Server Error
+                code = new ResCode("500");
                 phrase = new ResPhrase(handlePhrase(code));
                 break;
         }
