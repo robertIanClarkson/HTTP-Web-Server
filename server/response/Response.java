@@ -91,24 +91,20 @@ public class Response {
     }
 
     private void handlePUT(Request request) throws IOException, InternalServerError {
-        File newFile;
         FileOutputStream out;
         String uri = request.getId().getURI();
+        File newFile = new File(uri);
         if(Files.exists(Paths.get(uri))){
-            out = new FileOutputStream(uri, true);
-            out.write(request.getRequestBody().getBody());
-            out.close();
-        } else {
-            newFile = new File(uri);
-            if(newFile.createNewFile()){
-                if(request.hasBody()) {
-                    out = new FileOutputStream(newFile, false);
-                    out.write(request.getRequestBody().getBody());
-                    out.close();
-                }
-            } else {
-                throw new InternalServerError("Failed to create file : " + request.getId().getOriginalURI());
+            Files.delete(Paths.get(uri));
+        }
+        if(newFile.createNewFile()){
+            if(request.hasBody()) {
+                out = new FileOutputStream(newFile, false);
+                out.write(request.getRequestBody().getBody());
+                out.close();
             }
+        } else {
+            throw new InternalServerError("Failed to create file : " + request.getId().getOriginalURI());
         }
         headers.addHeader("Connection", "close");
         code = new ResCode("201");
