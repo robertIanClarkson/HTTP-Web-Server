@@ -80,11 +80,11 @@ public class Response {
         }
     }
 
-    private void handleDELETE(Request request) throws NotFound {
+    private void handleDELETE(Request request) throws NotFound, IOException {
         headers.addHeader("Connection", "close");
         String uri = request.getId().getURI();
         if(Files.exists(Paths.get(uri))){
-            // delete
+            Files.delete(Paths.get(uri));
         } else {
             throw new NotFound("Cannot Delete : No File --> " + uri);
         }
