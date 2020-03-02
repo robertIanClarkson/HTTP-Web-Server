@@ -1,16 +1,12 @@
 package server.response;
 
-import javafx.util.Pair;
 import server.configuration.Configuration;
 import server.request.Request;
 import server.response.exception.InternalServerError;
 import server.response.exception.NotFound;
 import server.response.exception.NotModified;
 
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -94,14 +90,27 @@ public class Response {
         phrase = new ResPhrase(handlePhrase(code));
     }
 
-    private void handlePUT(Request request) {
-        headers.addHeader("Connection", "close");
+    private void handlePUT(Request request) throws IOException, InternalServerError {
+        File newFile;
+        FileOutputStream out;
         String uri = request.getId().getURI();
         if(Files.exists(Paths.get(uri))){
-            // replace
+            out = new FileOutputStream(uri, true);
+            out.write(request.getRequestBody().getBody());
+            out.close();
         } else {
-            // create
+            newFile = new File(uri);
+            if(newFile.createNewFile()){
+                if(request.hasBody()) {
+                    out = new FileOutputStream(newFile, false);
+                    out.write(request.getRequestBody().getBody());
+                    out.close();
+                }
+            } else {
+                throw new InternalServerError("Failed to create file : " + request.getId().getOriginalURI());
+            }
         }
+        headers.addHeader("Connection", "close");
         code = new ResCode("201");
         phrase = new ResPhrase(handlePhrase(code));
     }
