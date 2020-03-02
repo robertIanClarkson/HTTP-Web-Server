@@ -25,7 +25,7 @@ public class Request {
         requestHeaders = new ReqHeaders(reader);
         if (requestHeaders.hasBody()) {
             bodyLength = requestHeaders.getHeader("Content-Length");
-            requestBody = new ReqBody(client.getInputStream(), Integer.parseInt(bodyLength));
+            requestBody = new ReqBody(reader , Integer.parseInt(bodyLength));
         }
     }
 
