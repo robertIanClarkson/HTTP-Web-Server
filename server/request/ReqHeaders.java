@@ -15,7 +15,8 @@ public class ReqHeaders {
             "Host", "Connection", "Cache-Control", "DNT", "Upgrade-Insecure-Requests",
             "User-Agent", "Sec-Fetch-User", "Accept", "Sec-Fetch-Site", "Sec-Fetch-Mode",
             "Accept-Encoding", "Accept-Language", "Referer", "X-Requested-With",
-            "If-Modified-Since", "If-None-Match", "Pragma", "Authorization"
+            "If-Modified-Since", "If-None-Match", "Pragma", "Authorization",
+            "Content-Length", "Origin", "Content-Type"
 
     );
     private HashMap<String, String> headers;
