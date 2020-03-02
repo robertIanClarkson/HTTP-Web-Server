@@ -4,6 +4,7 @@ import server.configuration.Configuration;
 import server.request.Request;
 import server.response.exception.InternalServerError;
 import server.response.exception.NotFound;
+import server.response.exception.NotModified;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -52,7 +53,7 @@ public class Response {
         }
     }
 
-    public Response(Request request) throws IOException, NotFound, InternalServerError {
+    public Response(Request request) throws IOException, NotFound, InternalServerError, NotModified {
         headers = new ResHeaders();
         version = new ResVersion(request.getRequestVersion().getVersion());
         headers.addHeader("Date", getServerTime());
@@ -94,20 +95,48 @@ public class Response {
     private void handleTRACE(Request request) {
     }
 
-    private void handleDELETE(Request request) {
+    private void handleDELETE(Request request) throws NotFound {
+        headers.addHeader("Connection", "close");
+        String uri = request.getId().getURI();
+        if(Files.exists(Paths.get(uri))){
+            // delete
+        } else {
+            throw new NotFound("Cannot Delete : No File --> " + uri);
+        }
+        code = new ResCode("201");
+        phrase = new ResPhrase(handlePhrase(code));
     }
 
     private void handlePUT(Request request) {
+        headers.addHeader("Connection", "close");
+        String uri = request.getId().getURI();
+        if(Files.exists(Paths.get(uri))){
+            // replace
+        } else {
+            // create
+        }
+        code = new ResCode("201");
+        phrase = new ResPhrase(handlePhrase(code));
     }
 
-    private void handleHEAD(Request request) {
+    private void handleHEAD(Request request) throws NotFound, InternalServerError, IOException {
+        if(request.hasScriptAlias()) {
+            if(!runScript(request)) {
+                throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
+            }
+        }
+        headers.addHeader("Connection", "close");
+        String uri = request.getId().getURI();
+        if(Files.notExists(Paths.get(uri))){
+            throw new NotFound(uri);
+        }
+        String extension = uri.substring(uri.lastIndexOf(".") + 1);
+        headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
+        code = new ResCode("200");
+        phrase = new ResPhrase(handlePhrase(code));
     }
 
-    private void handlePOST(Request request) {
-
-    }
-
-    private void handleGET(Request request) throws IOException, NotFound, InternalServerError {
+    private void handlePOST(Request request) throws InternalServerError, IOException, NotFound {
         if(request.hasScriptAlias()) {
             if(!runScript(request)) {
                 throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
@@ -128,6 +157,36 @@ public class Response {
         }
         code = new ResCode("200");
         phrase = new ResPhrase(handlePhrase(code));
+    }
+
+    private void handleGET(Request request) throws IOException, NotFound, InternalServerError, NotModified {
+        if(request.hasScriptAlias()) {
+            if(!runScript(request)) {
+                throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
+            }
+        }
+        headers.addHeader("Connection", "close");
+        String uri = request.getId().getURI();
+        if(Files.notExists(Paths.get(uri))){
+            throw new NotFound(uri);
+        } else if(!modified(uri)) {
+            throw new NotModified("File \"" + uri + "\" was not modified");
+        } else {
+            String extension = uri.substring(uri.lastIndexOf(".") + 1);
+            headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
+            try {
+                body = new ResBody(request.getId().getURI());
+                headers.addHeader("Content-Length", String.valueOf(body.getLength()));
+            } catch (Exception e) {
+                System.out.println("Notice: Response.handleGet --> No Body");
+            }
+            code = new ResCode("200");
+            phrase = new ResPhrase(handlePhrase(code));
+        }
+    }
+
+    private boolean modified(String uri) {
+        return false;
     }
 
     private String handlePhrase(ResCode code) {

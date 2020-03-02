@@ -11,6 +11,7 @@ import server.resource.Resource;
 import server.response.Response;
 import server.response.exception.InternalServerError;
 import server.response.exception.NotFound;
+import server.response.exception.NotModified;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -51,7 +52,10 @@ public class Worker extends Thread implements Runnable {
         } catch(NotFound e) {
             System.out.println(e);
             response = new Response("404");
-        }  finally {
+        } catch(NotModified e) {
+            System.out.println(e);
+            response = new Response("304");
+        } finally {
             try {
                 sender = new Sender();
                 sender.sendResponse(client, response);
