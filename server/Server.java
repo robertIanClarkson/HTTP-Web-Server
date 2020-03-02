@@ -18,9 +18,6 @@ public class Server {
 
     public Server() throws IOException, ConfigError {
         new Configuration("conf/httpd.conf", "conf/mime.types");
-        new Resource();
-        new AccessCheck();
-        new Log();
         socket = new ServerSocket( Configuration.getHttpd().getListen() );
     }
 
