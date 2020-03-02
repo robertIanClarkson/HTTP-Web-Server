@@ -77,25 +77,7 @@ public class Response {
             case "DELETE" :
                 handleDELETE(request);
                 break;
-            case "TRACE" :
-                handleTRACE(request);
-                break;
-            case "CONNECT" :
-                handleCONNECT(request);
-                break;
-            case "PATCH" :
-                handlePATCH(request);
-                break;
         }
-    }
-
-    private void handlePATCH(Request request) {
-    }
-
-    private void handleCONNECT(Request request) {
-    }
-
-    private void handleTRACE(Request request) {
     }
 
     private void handleDELETE(Request request) throws NotFound {
@@ -189,7 +171,7 @@ public class Response {
     }
 
     private boolean modified(String uri) {
-        return false;
+        return true;
     }
 
     private String handlePhrase(ResCode code) {
@@ -222,8 +204,6 @@ public class Response {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
-//        SimpleDateFormat dateFormat = new SimpleDateFormat(
-//                "EEE, dd MMM yyyy HH:mm:ss", Locale.US);
         dateFormat.setTimeZone(TimeZone.getTimeZone("PST"));
         return dateFormat.format(calendar.getTime());
     }
