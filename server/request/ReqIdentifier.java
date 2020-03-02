@@ -4,11 +4,9 @@ public class ReqIdentifier {
 
     private String uri, originalURI;
     private ReqQuery query;
-    private boolean hasQuery;
 
     public ReqIdentifier(String uri) {
         originalURI = uri;
-        hasQuery = false;
         if(uri.isEmpty()) {
             this.uri = "/";
         } else {
@@ -30,18 +28,21 @@ public class ReqIdentifier {
 
     public void setQuery(ReqQuery query) {
         this.query = query;
-        hasQuery = true;
     }
 
     public String getOriginalURI() {
         return originalURI;
     }
 
+    public boolean hasQuery() {
+        return (query != null);
+    }
+
     @Override
     public String toString() {
         String id = "";
         id += this.uri;
-        if(hasQuery) {
+        if(hasQuery()) {
             id += this.query;
         }
         id += " ";
