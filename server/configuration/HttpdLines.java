@@ -25,6 +25,19 @@ public class HttpdLines {
                 directives.put(key, value);
             }
         }
+        addDefaults();
+    }
+
+    private void addDefaults() {
+        if(!directives.containsKey("DirectoryIndex")) {
+            directives.put("DirectoryIndex", "index.html");
+        }
+        if(!directives.containsKey("Listen")) {
+            directives.put("Listen", "8080");
+        }
+        if(!directives.containsKey("AccessFile")) {
+            directives.put("AccessFile", ".htaccess");
+        }
     }
 
     public String getDirective(String key) throws ConfigError {
