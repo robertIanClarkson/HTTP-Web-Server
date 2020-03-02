@@ -1,18 +1,20 @@
 package server.response;
 
+import javafx.util.Pair;
 import server.configuration.Configuration;
 import server.request.Request;
 import server.response.exception.InternalServerError;
 import server.response.exception.NotFound;
 import server.response.exception.NotModified;
 
+import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.*;
 
 public class Response {
 
@@ -145,29 +147,30 @@ public class Response {
     }
 
     private void handleGET(Request request) throws IOException, NotFound, InternalServerError, NotModified {
+        headers.addHeader("Connection", "close");
         if(request.hasScriptAlias()) {
             if(!runScript(request)) {
                 throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
             }
-        }
-        headers.addHeader("Connection", "close");
-        String uri = request.getId().getURI();
-        if(Files.notExists(Paths.get(uri))){
-            throw new NotFound(uri);
-        } else if(!modified(uri)) {
-            throw new NotModified("File \"" + uri + "\" was not modified");
         } else {
-            String extension = uri.substring(uri.lastIndexOf(".") + 1);
-            headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
-            try {
-                body = new ResBody(request.getId().getURI());
-                headers.addHeader("Content-Length", String.valueOf(body.getLength()));
-            } catch (Exception e) {
-                System.out.println("Notice: Response.handleGet --> No Body");
+            String uri = request.getId().getURI();
+            if (Files.notExists(Paths.get(uri))) {
+                throw new NotFound(uri);
+            } else if (!modified(uri)) {
+                throw new NotModified("File \"" + uri + "\" was not modified");
+            } else {
+                String extension = uri.substring(uri.lastIndexOf(".") + 1);
+                headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
+                try {
+                    body = new ResBody(request.getId().getURI());
+                    headers.addHeader("Content-Length", String.valueOf(body.getLength()));
+                } catch (Exception e) {
+                    System.out.println("Notice: Response.handleGet --> No Body");
+                }
             }
-            code = new ResCode("200");
-            phrase = new ResPhrase(handlePhrase(code));
         }
+        code = new ResCode("200");
+        phrase = new ResPhrase(handlePhrase(code));
     }
 
     private boolean modified(String uri) {
@@ -208,17 +211,35 @@ public class Response {
         return dateFormat.format(calendar.getTime());
     }
 
-    private boolean runScript(Request request) throws IOException {
-        try {
-            Runtime runtime = Runtime.getRuntime();
-            Process process = runtime.exec("perl -T " + request.getId().getURI());
-            process.waitFor();
-            System.out.println(process.exitValue());
-            return true;
-        } catch (Exception e) {
-            System.out.println("Error: Response.runScript --> " + e);
-        }
-        return false;
+    private boolean runScript(Request request) {
+//        try {
+//            String envKey, envValue;
+//            ProcessBuilder pb = new ProcessBuilder();
+//            for (String key : request.getRequestHeaders().getHeaders().keySet()) {
+//                envKey = "HTTP_" + key.toUpperCase();
+//                envValue = request.getRequestHeaders().getHeader(key);
+//                pb.environment().put(envKey, envValue);
+//            }
+//            if (request.getId().hasQuery()) {
+//                pb.environment().put("QUERYSTRING", request.getId().getQuery().getQuery());
+//            }
+//            pb.environment().put("HTTP_VERB", request.getMethod().getVerb());
+//            pb.environment().put("HTTP_PROTOCOL", request.getRequestVersion().getVersion());
+//            Process process = pb.start();
+//            OutputStream stdin = process.getOutputStream();
+//            for(int i = 0; i < request.getRequestBody().getBody().length; i++) {
+//                stdin.write(request.getRequestBody().getBody()[i]);
+//            }
+//            stdin.flush();
+//            stdin.close();
+//            body = new ResBody(process.getInputStream());
+//            headers.addHeader("Content-Length", String.valueOf(body.getLength()));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+////            System.out.println("Response.runScript : " + e);
+//            return false;
+//        }
+        return true;
     }
 
     public ResCode getCode() {
