@@ -20,7 +20,7 @@ public class ResHeaders {
     @Override
     public String toString() {
         String format = "";
-        for(String key : headers.keySet()) {
+        for (String key : headers.keySet()) {
             format += key + ": " + headers.get(key) + "\r\n";
         }
         format += "\r\n";

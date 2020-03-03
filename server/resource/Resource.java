@@ -6,7 +6,8 @@ import server.request.Request;
 
 public class Resource {
 
-    public Resource() { }
+    public Resource() {
+    }
 
     public void handleURI(Request request) {
         ReqQuery query;
@@ -17,23 +18,23 @@ public class Resource {
             System.out.println("Error: Resource.handleURI --> " + e);
             return;
         }
-        if(uri.contains("?")) {
-            query = new ReqQuery( uri.substring(uri.lastIndexOf("?") + 1) );
+        if (uri.contains("?")) {
+            query = new ReqQuery(uri.substring(uri.lastIndexOf("?") + 1));
             uri = uri.substring(0, uri.indexOf("?"));
             request.getId().setQuery(query);
 
         }
 
-        if(Configuration.getHttpd().isAlias(uri)) {
+        if (Configuration.getHttpd().isAlias(uri)) {
             uri = Configuration.getHttpd().getAlias(uri);
-        } else if(Configuration.getHttpd().isScriptAlias(uri)) {
+        } else if (Configuration.getHttpd().isScriptAlias(uri)) {
             uri = Configuration.getHttpd().getScriptAlias(uri);
             request.hasScriptAlias(true);
         } else {
             uri = Configuration.getHttpd().getDocumentRoot() + uri.substring(1);
         }
 
-        if(uri.endsWith("/")) {
+        if (uri.endsWith("/")) {
             uri += Configuration.getHttpd().getDirectoryIndex();
         }
 

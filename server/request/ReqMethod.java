@@ -13,7 +13,7 @@ public class ReqMethod {
     private String verb;
 
     public ReqMethod(String verb) throws BadRequest {
-        if(VERBS.contains(verb)) {
+        if (VERBS.contains(verb)) {
             this.verb = verb;
         } else {
             throw new BadRequest("Invalid Verb: " + verb);

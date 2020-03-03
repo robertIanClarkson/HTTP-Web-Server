@@ -8,7 +8,7 @@ public class HttpdConfig {
     private String serverRoot, documentRoot, directoryIndex, logFile, accessFile;
     private int listen;
 
-    HttpdConfig( String fileName ) throws IOException, ConfigError {
+    HttpdConfig(String fileName) throws IOException, ConfigError {
         lines = new HttpdLines(fileName);
         serverRoot = lines.getDirective("ServerRoot");
         documentRoot = lines.getDirective("DocumentRoot");

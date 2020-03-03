@@ -19,13 +19,13 @@ public class Request {
     public Request(Socket client) throws IOException, BadRequest {
         String bodyLength;
         reader = new BufferedReader(
-                new InputStreamReader( client.getInputStream() )
+                new InputStreamReader(client.getInputStream())
         );
         processRequestLine(reader.readLine());
         requestHeaders = new ReqHeaders(reader);
         if (requestHeaders.hasBody()) {
             bodyLength = requestHeaders.getHeader("Content-Length");
-            requestBody = new ReqBody(reader , Integer.parseInt(bodyLength));
+            requestBody = new ReqBody(reader, Integer.parseInt(bodyLength));
         }
     }
 

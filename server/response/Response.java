@@ -6,12 +6,17 @@ import server.response.exception.InternalServerError;
 import server.response.exception.NotFound;
 import server.response.exception.NotModified;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Response {
 
@@ -62,19 +67,19 @@ public class Response {
         headers.addHeader("Date", getServerTime());
         headers.addHeader("Server", "Clarkson_&_Gao_Server");
         switch (request.getMethod().getVerb()) {
-            case "GET" :
+            case "GET":
                 handleGET(request);
                 break;
-            case "POST" :
+            case "POST":
                 handlePOST(request);
                 break;
-            case "HEAD" :
+            case "HEAD":
                 handleHEAD(request);
                 break;
-            case "PUT" :
+            case "PUT":
                 handlePUT(request);
                 break;
-            case "DELETE" :
+            case "DELETE":
                 handleDELETE(request);
                 break;
         }
@@ -83,7 +88,7 @@ public class Response {
     private void handleDELETE(Request request) throws NotFound, IOException {
         headers.addHeader("Connection", "close");
         String uri = request.getId().getURI();
-        if(Files.exists(Paths.get(uri))){
+        if (Files.exists(Paths.get(uri))) {
             Files.delete(Paths.get(uri));
         } else {
             throw new NotFound("Cannot Delete : No File --> " + uri);
@@ -96,11 +101,11 @@ public class Response {
         FileOutputStream out;
         String uri = request.getId().getURI();
         File newFile = new File(uri);
-        if(Files.exists(Paths.get(uri))){
+        if (Files.exists(Paths.get(uri))) {
             Files.delete(Paths.get(uri));
         }
-        if(newFile.createNewFile()){
-            if(request.hasBody()) {
+        if (newFile.createNewFile()) {
+            if (request.hasBody()) {
                 out = new FileOutputStream(newFile, false);
                 out.write(request.getRequestBody().getBody());
                 out.close();
@@ -114,8 +119,8 @@ public class Response {
     }
 
     private void handleHEAD(Request request) throws NotFound, InternalServerError, NotModified {
-        if(request.hasScriptAlias()) {
-            if(!runScript(request)) {
+        if (request.hasScriptAlias()) {
+            if (!runScript(request)) {
                 throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
             }
         } else {
@@ -136,8 +141,8 @@ public class Response {
 
     private void handlePOST(Request request) throws InternalServerError, NotFound, NotModified {
         headers.addHeader("Connection", "close");
-        if(request.hasScriptAlias()) {
-            if(runScript(request)) {
+        if (request.hasScriptAlias()) {
+            if (runScript(request)) {
                 System.out.println("******Script \"" + request.getId().getOriginalURI() + "\" Ran Successfully******");
             } else {
                 throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
@@ -165,8 +170,8 @@ public class Response {
 
     private void handleGET(Request request) throws NotFound, InternalServerError, NotModified {
         headers.addHeader("Connection", "close");
-        if(request.hasScriptAlias()) {
-            if(runScript(request)) {
+        if (request.hasScriptAlias()) {
+            if (runScript(request)) {
                 System.out.println("******Script \"" + request.getId().getOriginalURI() + "\" Ran Successfully******");
             } else {
                 throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
@@ -199,7 +204,7 @@ public class Response {
     }
 
     private boolean modified(Request request) throws InternalServerError {
-        if(request.getRequestHeaders().hasHeader("If-Modified-Since")) {
+        if (request.getRequestHeaders().hasHeader("If-Modified-Since")) {
             String requestDateValue = request.getRequestHeaders().getHeader("If-Modified-Since");
             requestDateValue = requestDateValue.substring(requestDateValue.indexOf(" ") + 1);
             SimpleDateFormat requestDatePattern = new SimpleDateFormat("dd MMM yyyy HH:mm:ss zzz");
@@ -210,7 +215,7 @@ public class Response {
                 Date requestDate = requestDatePattern.parse(requestDateValue);
                 Date fileDate = fileDatePattern.parse(fileDatePattern.format(file.lastModified()));
                 return fileDate.after(requestDate);
-            } catch(ParseException e) {
+            } catch (ParseException e) {
                 throw new InternalServerError("Failed to parse Request Date");
             }
         }
@@ -218,28 +223,28 @@ public class Response {
     }
 
     private String handlePhrase(ResCode code) {
-        switch(code.getCode()) {
-            case "200" :
+        switch (code.getCode()) {
+            case "200":
                 return "OK";
-            case "201" :
+            case "201":
                 return "Created";
-            case "204" :
+            case "204":
                 return "No Content";
-            case "301" :
+            case "301":
                 return "Moved Permanently";
-            case "304" :
+            case "304":
                 return "Not Modified";
-            case "400" :
+            case "400":
                 return "Bad Request";
-            case "401" :
+            case "401":
                 return "Unauthorized";
-            case "403" :
+            case "403":
                 return "Forbidden";
-            case "404" :
+            case "404":
                 return "Not Found";
-            case "422" :
+            case "422":
                 return "Unprocessable Entity";
-            case "500" :
+            case "500":
                 return "Internal Server Error";
         }
         return null;

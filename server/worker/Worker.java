@@ -3,7 +3,6 @@ package server.worker;
 import server.access_check.AccessCheck;
 import server.access_check.exceptions.Forbidden;
 import server.access_check.exceptions.Unauthorized;
-import server.configuration.ConfigError;
 import server.logs.Log;
 import server.request.Request;
 import server.request.exceptions.BadRequest;
@@ -19,7 +18,7 @@ import java.net.Socket;
 public class Worker extends Thread implements Runnable {
     private Socket client;
 
-    public Worker (Socket client) {
+    public Worker(Socket client) {
         this.client = client;
     }
 
@@ -37,22 +36,22 @@ public class Worker extends Thread implements Runnable {
             accessCheck = new AccessCheck();
             accessCheck.check(request);
             response = new Response(request);
-        } catch(IOException | InternalServerError e) {
+        } catch (IOException | InternalServerError e) {
             System.out.println(e);
             response = new Response("500");
-        } catch(BadRequest e) {
+        } catch (BadRequest e) {
             System.out.println(e);
             response = new Response("400");
-        }  catch(Unauthorized e) {
+        } catch (Unauthorized e) {
             System.out.println(e);
             response = new Response("401");
-        } catch(Forbidden e) {
+        } catch (Forbidden e) {
             System.out.println(e);
             response = new Response("403");
-        } catch(NotFound e) {
+        } catch (NotFound e) {
             System.out.println(e);
             response = new Response("404");
-        } catch(NotModified e) {
+        } catch (NotModified e) {
             System.out.println(e);
             response = new Response("304");
         } finally {
@@ -73,7 +72,7 @@ public class Worker extends Thread implements Runnable {
                 System.out.println("Logging Error : " + e);
             }
 //            ServerDebug.printRequest(request);
-            ServerDebug.printStatusCode(request, response);
+//            ServerDebug.printStatusCode(request, response);
 //            ServerDebug.printResponse(response);
         }
     }

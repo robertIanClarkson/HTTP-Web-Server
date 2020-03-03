@@ -13,7 +13,7 @@ public class ReqHeaders {
         String line, key, value;
         headers = new HashMap<>();
         line = reader.readLine();
-        while(line != null && !(line.equals(""))) {
+        while (line != null && !(line.equals(""))) {
             key = line.substring(0, line.indexOf(":")).trim();
             value = line.substring(line.indexOf(":") + 1).trim();
             headers.put(key, value);
@@ -40,7 +40,7 @@ public class ReqHeaders {
     @Override
     public String toString() {
         String format = "";
-        for(String key : headers.keySet()) {
+        for (String key : headers.keySet()) {
             format += key + ": " + headers.get(key) + "\r\n";
         }
         format += "\r\n";

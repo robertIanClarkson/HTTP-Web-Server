@@ -22,18 +22,18 @@ public class AccessCheck {
 
     public AccessCheck() {
         directives = new HashMap<>();
-        username_password = new HashMap<>();;
+        username_password = new HashMap<>();
     }
 
     public void check(Request request) throws Unauthorized, Forbidden, IOException {
         String mockAccessFile = request.getId().getURI();
         mockAccessFile = mockAccessFile.substring(0, mockAccessFile.lastIndexOf("/") + 1);
         mockAccessFile += Configuration.getHttpd().getAccessFile();
-        if(accessExist(mockAccessFile)) {
+        if (accessExist(mockAccessFile)) {
             setDirectives(mockAccessFile);
             setUsernamePasswords();
-            if(hasAuthHeader(request)) {
-                if(validUsernamePassword(request)) {
+            if (hasAuthHeader(request)) {
+                if (validUsernamePassword(request)) {
                     System.out.println("******ACCESS-GRANTED******");
                 } else {
                     throw new Forbidden("Invalid user/pass");
@@ -54,21 +54,22 @@ public class AccessCheck {
 
     private boolean validUsernamePassword(Request request) throws Forbidden {
         String[] requestTokens = getRequestSHA(request);
-        if(username_password.containsKey(requestTokens[0])) {
+        if (username_password.containsKey(requestTokens[0])) {
             String password = username_password.get(requestTokens[0]);
             return requestTokens[1].equals(password);
         }
         return false;
     }
+
     private String[] getRequestSHA(Request request) throws Forbidden {
         String authInfo = request.getRequestHeaders().getHeader("Authorization");
         authInfo = authInfo.substring(authInfo.indexOf(":") + 7).trim();
         String credentials = new String(
-                Base64.getDecoder().decode( authInfo ),
-                Charset.forName( "UTF-8" )
+                Base64.getDecoder().decode(authInfo),
+                Charset.forName("UTF-8")
         );
-        String[] tokens = credentials.split( ":" );
-        if(tokens.length == 2) {
+        String[] tokens = credentials.split(":");
+        if (tokens.length == 2) {
             tokens[1] = encryptClearPassword(tokens[1]);
         } else {
             throw new Forbidden("Missing credential");
@@ -76,15 +77,15 @@ public class AccessCheck {
         return tokens;
     }
 
-    private String encryptClearPassword( String password ) {
+    private String encryptClearPassword(String password) {
         // Encrypt the cleartext password (that was decoded from the Base64 String
         // provided by the client) using the SHA-1 encryption algorithm
         try {
-            MessageDigest mDigest = MessageDigest.getInstance( "SHA-1" );
-            byte[] result = mDigest.digest( password.getBytes() );
+            MessageDigest mDigest = MessageDigest.getInstance("SHA-1");
+            byte[] result = mDigest.digest(password.getBytes());
 
-            return Base64.getEncoder().encodeToString( result );
-        } catch( Exception e ) {
+            return Base64.getEncoder().encodeToString(result);
+        } catch (Exception e) {
             return "";
         }
     }
@@ -93,7 +94,7 @@ public class AccessCheck {
     private void setDirectives(String accessFile) throws IOException {
         String line, key, value;
         BufferedReader reader = new BufferedReader(new FileReader(accessFile));
-        while((line = reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             key = line.substring(0, line.indexOf(" ")).trim();
             value = stripQuotes(line.substring(line.indexOf(" ")).trim());
             directives.put(key, value);
@@ -107,7 +108,7 @@ public class AccessCheck {
     private void setUsernamePasswords() throws IOException {
         String line, key, value;
         BufferedReader reader = new BufferedReader(new FileReader(directives.get("AuthUserFile")));
-        while((line = reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             key = line.substring(0, line.indexOf(":")).trim();
             value = line.substring(line.indexOf(":") + 6).trim();
             username_password.put(key, value);
@@ -115,10 +116,10 @@ public class AccessCheck {
     }
 
     private String stripQuotes(String line) {
-        if(line.contains("\"")) {
+        if (line.contains("\"")) {
             int x = line.indexOf("\"");
             int y = line.lastIndexOf("\"");
-            return line.substring( x+1, y);
+            return line.substring(x + 1, y);
         }
         return line;
     }

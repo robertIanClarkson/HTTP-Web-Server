@@ -14,7 +14,7 @@ public class ReqVersion {
     private String version;
 
     public ReqVersion(String version) throws BadRequest {
-        if(VERSIONS.contains(version)) {
+        if (VERSIONS.contains(version)) {
             this.version = version;
         } else {
             throw new BadRequest("Invalid HTTP Version: " + version);

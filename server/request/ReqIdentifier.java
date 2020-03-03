@@ -7,7 +7,7 @@ public class ReqIdentifier {
 
     public ReqIdentifier(String uri) {
         originalURI = uri;
-        if(uri.isEmpty()) {
+        if (uri.isEmpty()) {
             this.uri = "/";
         } else {
             this.uri = uri;
@@ -42,7 +42,7 @@ public class ReqIdentifier {
     public String toString() {
         String id = "";
         id += this.uri;
-        if(hasQuery()) {
+        if (hasQuery()) {
             id += this.query;
         }
         id += " ";

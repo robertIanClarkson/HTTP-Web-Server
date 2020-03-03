@@ -1,6 +1,7 @@
 package server.request;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 public class ReqBody {
 
@@ -8,7 +9,7 @@ public class ReqBody {
 
     public ReqBody(BufferedReader reader, int length) throws IOException {
         body = new byte[length];
-        for(int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
             body[i] = (byte) reader.read();
         }
     }

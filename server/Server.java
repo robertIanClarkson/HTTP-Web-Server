@@ -15,11 +15,11 @@ public class Server {
 
     public Server() throws IOException, ConfigError {
         new Configuration("conf/httpd.conf", "conf/mime.types");
-        socket = new ServerSocket( Configuration.getHttpd().getListen() );
+        socket = new ServerSocket(Configuration.getHttpd().getListen());
     }
 
     public void start() {
-        while( true ) {
+        while (true) {
             try {
                 client = socket.accept();
                 Worker worker = new Worker(client);

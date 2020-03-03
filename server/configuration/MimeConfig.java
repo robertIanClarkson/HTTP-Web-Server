@@ -26,9 +26,9 @@ public class MimeConfig {
     private void tokenize(String line) {
         String type, extension;
         StringTokenizer tokens = new StringTokenizer(line, DELIMITERS);
-        if(tokens.countTokens() > 1) {
+        if (tokens.countTokens() > 1) {
             type = tokens.nextToken();
-            while(tokens.hasMoreTokens()) {
+            while (tokens.hasMoreTokens()) {
                 extension = tokens.nextToken();
                 mimeTypes.put(extension, type);
             }
