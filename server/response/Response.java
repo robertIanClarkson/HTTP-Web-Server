@@ -159,7 +159,9 @@ public class Response {
     private void handleGET(Request request) throws IOException, NotFound, InternalServerError, NotModified {
         headers.addHeader("Connection", "close");
         if(request.hasScriptAlias()) {
-            if(!runScript(request)) {
+            if(runScript(request)) {
+                System.out.println("******Script \"" + request.getId().getOriginalURI() + "\" Ran Successfully******");
+            } else {
                 throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
             }
         } else {
@@ -224,7 +226,7 @@ public class Response {
     private boolean runScript(Request request) {
         try {
             String envKey, envValue;
-            ProcessBuilder pb = new ProcessBuilder(/*Path for script*/);
+            ProcessBuilder pb = new ProcessBuilder(request.getId().getURI());
             for (String key : request.getRequestHeaders().getHeaders().keySet()) {
                 envKey = "HTTP_" + key.toUpperCase();
                 envValue = request.getRequestHeaders().getHeader(key);
@@ -236,12 +238,6 @@ public class Response {
             pb.environment().put("HTTP_VERB", request.getMethod().getVerb());
             pb.environment().put("HTTP_PROTOCOL", request.getRequestVersion().getVersion());
             Process process = pb.start();
-            OutputStream stdin = process.getOutputStream();
-            for(int i = 0; i < request.getRequestBody().getBody().length; i++) {
-                stdin.write(request.getRequestBody().getBody()[i]);
-            }
-            stdin.flush();
-            stdin.close();
             body = new ResBody(process.getInputStream());
             headers.addHeader("Content-Length", String.valueOf(body.getLength()));
         } catch (Exception e) {
