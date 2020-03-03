@@ -17,7 +17,7 @@ public class Log {
             bodyLength = String.valueOf(response.getResponseBody().getLength());
         }
         String user = "-";
-        FileWriter fileWriter = new FileWriter( Configuration.getHttpd().getLogFile(), true); //Set true for append mode
+        FileWriter fileWriter = new FileWriter( Configuration.getHttpd().getLogFile(), true);
         PrintWriter printWriter = new PrintWriter(fileWriter);
         printWriter.printf("%s - %s [%s] \"%s %-25s %s\" %s %s\n",
                 request.getRequestHeaders().getHeader("Host"),

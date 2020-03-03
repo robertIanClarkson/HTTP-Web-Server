@@ -1,19 +1,15 @@
 package server.request;
 
-import server.request.exceptions.BadRequest;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 
 public class ReqHeaders {
 
     private HashMap<String, String> headers;
 
-    public ReqHeaders(BufferedReader reader) throws IOException, BadRequest {
+    public ReqHeaders(BufferedReader reader) throws IOException {
         String line, key, value;
         headers = new HashMap<>();
         line = reader.readLine();

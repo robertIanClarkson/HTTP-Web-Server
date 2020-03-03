@@ -1,10 +1,7 @@
 package server;
 
-import server.access_check.AccessCheck;
 import server.configuration.ConfigError;
 import server.configuration.Configuration;
-import server.logs.Log;
-import server.resource.Resource;
 import server.worker.Worker;
 
 import java.io.IOException;
@@ -27,7 +24,6 @@ public class Server {
                 client = socket.accept();
                 Worker worker = new Worker(client);
                 worker.start();
-//                System.out.println("Worker Name : " + worker.getName());
             } catch (IOException e) {
                 System.out.println("Error: Server.start --> " + e);
             }

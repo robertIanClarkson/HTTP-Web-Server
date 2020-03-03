@@ -37,7 +37,7 @@ public class Worker extends Thread implements Runnable {
             accessCheck = new AccessCheck();
             accessCheck.check(request);
             response = new Response(request);
-        } catch(IOException | InternalServerError | ConfigError e) {
+        } catch(IOException | InternalServerError e) {
             System.out.println(e);
             response = new Response("500");
         } catch(BadRequest e) {
@@ -67,13 +67,13 @@ public class Worker extends Thread implements Runnable {
             } catch (IOException e) {
                 System.out.println("Error: Worker.run.close --> " + e);
             }
-//            try {
-//                Log.newLog(request, response);
-//            } catch (Exception e) {
-//                System.out.println("Logging Error : " + e);
-//            }
+            try {
+                Log.newLog(request, response);
+            } catch (Exception e) {
+                System.out.println("Logging Error : " + e);
+            }
 //            ServerDebug.printRequest(request);
-//            ServerDebug.printStatusCode(request, response);
+            ServerDebug.printStatusCode(request, response);
 //            ServerDebug.printResponse(response);
         }
     }

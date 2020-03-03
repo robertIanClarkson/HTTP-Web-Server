@@ -1,6 +1,5 @@
 package server.resource;
 
-import server.configuration.ConfigError;
 import server.configuration.Configuration;
 import server.request.ReqQuery;
 import server.request.Request;
@@ -9,7 +8,7 @@ public class Resource {
 
     public Resource() { }
 
-    public void handleURI(Request request) throws ConfigError {
+    public void handleURI(Request request) {
         ReqQuery query;
         String uri;
         try {

@@ -7,11 +7,6 @@ public class ServerDebug {
     static void printRequest(Request request) {
         System.out.println("------------Request-------------");
         System.out.println(request);
-        if(request.hasBody()) {
-            System.out.println("***+++HAS BODY+++***");
-//            String body = new String(server.request.getBody().getBody(), StandardCharsets.US_ASCII);
-//            System.out.println(body);
-        }
     }
 
     static void printStatusCode(Request request, Response response) {
@@ -22,10 +17,5 @@ public class ServerDebug {
     static void printResponse(Response response) {
         System.out.println("------------Response------------");
         System.out.println(response);
-        if(response.hasBody()) {
-//            System.out.println("***+++HAS BODY+++***");
-//            String body = new String(server.response.getBody().getBody(), StandardCharsets.US_ASCII);
-//            System.out.println(body);
-        }
     }
 }
