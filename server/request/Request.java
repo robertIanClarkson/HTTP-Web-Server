@@ -21,7 +21,7 @@ public class Request {
         reader = new BufferedReader(
                 new InputStreamReader( client.getInputStream() )
         );
-        process(reader.readLine());
+        processRequestLine(reader.readLine());
         requestHeaders = new ReqHeaders(reader);
         if (requestHeaders.hasBody()) {
             bodyLength = requestHeaders.getHeader("Content-Length");
@@ -29,7 +29,7 @@ public class Request {
         }
     }
 
-    private void process(String line) throws BadRequest {
+    private void processRequestLine(String line) throws BadRequest {
         if (line != null) {
             String[] chunks = line.split(" ");
             if (chunks.length == 3) {
