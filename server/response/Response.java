@@ -113,21 +113,25 @@ public class Response {
         phrase = new ResPhrase(handlePhrase(code));
     }
 
-    private void handleHEAD(Request request) throws NotFound, InternalServerError, IOException {
+    private void handleHEAD(Request request) throws NotFound, InternalServerError, NotModified {
         if(request.hasScriptAlias()) {
             if(!runScript(request)) {
                 throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
             }
+        } else {
+            headers.addHeader("Connection", "close");
+            String uri = request.getId().getURI();
+            if (Files.notExists(Paths.get(uri))) {
+                throw new NotFound(uri);
+            } else if (!modified(request)) {
+                throw new NotModified("File \"" + request.getId().getOriginalURI() + "\" was not modified");
+            } else {
+                String extension = uri.substring(uri.lastIndexOf(".") + 1);
+                headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
+                code = new ResCode("200");
+                phrase = new ResPhrase(handlePhrase(code));
+            }
         }
-        headers.addHeader("Connection", "close");
-        String uri = request.getId().getURI();
-        if(Files.notExists(Paths.get(uri))){
-            throw new NotFound(uri);
-        }
-        String extension = uri.substring(uri.lastIndexOf(".") + 1);
-        headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
-        code = new ResCode("200");
-        phrase = new ResPhrase(handlePhrase(code));
     }
 
     private void handlePOST(Request request) throws InternalServerError, NotFound, NotModified {
@@ -141,9 +145,9 @@ public class Response {
         } else {
             String uri = request.getId().getURI();
             if (Files.notExists(Paths.get(uri))) {
-                throw new NotFound(uri);
+                throw new NotFound(request.getId().getOriginalURI());
             } else if (!modified(request)) {
-                throw new NotModified("File \"" + uri + "\" was not modified");
+                throw new NotModified("File \"" + request.getId().getOriginalURI() + "\" was not modified");
             } else {
                 String extension = uri.substring(uri.lastIndexOf(".") + 1);
                 headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
@@ -159,7 +163,7 @@ public class Response {
         phrase = new ResPhrase(handlePhrase(code));
     }
 
-    private void handleGET(Request request) throws IOException, NotFound, InternalServerError, NotModified {
+    private void handleGET(Request request) throws NotFound, InternalServerError, NotModified {
         headers.addHeader("Connection", "close");
         if(request.hasScriptAlias()) {
             if(runScript(request)) {
