@@ -7,6 +7,7 @@ import server.response.exception.NotFound;
 import server.response.exception.NotModified;
 
 import java.io.*;
+import java.nio.Buffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -217,33 +218,33 @@ public class Response {
     }
 
     private boolean runScript(Request request) {
-//        try {
-//            String envKey, envValue;
-//            ProcessBuilder pb = new ProcessBuilder();
-//            for (String key : request.getRequestHeaders().getHeaders().keySet()) {
-//                envKey = "HTTP_" + key.toUpperCase();
-//                envValue = request.getRequestHeaders().getHeader(key);
-//                pb.environment().put(envKey, envValue);
-//            }
-//            if (request.getId().hasQuery()) {
-//                pb.environment().put("QUERYSTRING", request.getId().getQuery().getQuery());
-//            }
-//            pb.environment().put("HTTP_VERB", request.getMethod().getVerb());
-//            pb.environment().put("HTTP_PROTOCOL", request.getRequestVersion().getVersion());
-//            Process process = pb.start();
-//            OutputStream stdin = process.getOutputStream();
-//            for(int i = 0; i < request.getRequestBody().getBody().length; i++) {
-//                stdin.write(request.getRequestBody().getBody()[i]);
-//            }
-//            stdin.flush();
-//            stdin.close();
-//            body = new ResBody(process.getInputStream());
-//            headers.addHeader("Content-Length", String.valueOf(body.getLength()));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-////            System.out.println("Response.runScript : " + e);
-//            return false;
-//        }
+        try {
+            String envKey, envValue;
+            ProcessBuilder pb = new ProcessBuilder(/*Path for script*/);
+            for (String key : request.getRequestHeaders().getHeaders().keySet()) {
+                envKey = "HTTP_" + key.toUpperCase();
+                envValue = request.getRequestHeaders().getHeader(key);
+                pb.environment().put(envKey, envValue);
+            }
+            if (request.getId().hasQuery()) {
+                pb.environment().put("QUERYSTRING", request.getId().getQuery().getQuery());
+            }
+            pb.environment().put("HTTP_VERB", request.getMethod().getVerb());
+            pb.environment().put("HTTP_PROTOCOL", request.getRequestVersion().getVersion());
+            Process process = pb.start();
+            OutputStream stdin = process.getOutputStream();
+            for(int i = 0; i < request.getRequestBody().getBody().length; i++) {
+                stdin.write(request.getRequestBody().getBody()[i]);
+            }
+            stdin.flush();
+            stdin.close();
+            body = new ResBody(process.getInputStream());
+            headers.addHeader("Content-Length", String.valueOf(body.getLength()));
+        } catch (Exception e) {
+            e.printStackTrace();
+//            System.out.println("Response.runScript : " + e);
+            return false;
+        }
         return true;
     }
 

@@ -48,7 +48,7 @@ public class AccessCheck {
     private boolean accessExist(Request request) {
         String mockAccessFile = request.getId().getURI();
         mockAccessFile = mockAccessFile.substring(0, mockAccessFile.lastIndexOf("/"));
-        mockAccessFile += "/.htaccess";
+        mockAccessFile += "/.htaccess"; // += / + Configuration.accessFile
         return Files.exists(Paths.get(mockAccessFile));
     }
 
