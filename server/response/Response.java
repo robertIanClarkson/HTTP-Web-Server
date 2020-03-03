@@ -176,7 +176,13 @@ public class Response {
             if (Files.notExists(Paths.get(uri))) {
                 throw new NotFound(request.getId().getOriginalURI());
             } else if (!modified(request)) {
-                throw new NotModified("File \"" + request.getId().getOriginalURI() + "\" was not modified");
+                SimpleDateFormat requestDatePattern = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
+                File file = new File(uri);
+                String fileDate = requestDatePattern.format(file.lastModified());
+                headers.addHeader("Last-Modified", fileDate);
+                code = new ResCode("304");
+                phrase = new ResPhrase(handlePhrase(code));
+                return;
             } else {
                 String extension = uri.substring(uri.lastIndexOf(".") + 1);
                 headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
@@ -202,7 +208,6 @@ public class Response {
             SimpleDateFormat fileDatePattern = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             try {
                 Date requestDate = requestDatePattern.parse(requestDateValue);
-                System.out.println(fileDatePattern.format(file.lastModified()));
                 Date fileDate = fileDatePattern.parse(fileDatePattern.format(file.lastModified()));
                 return fileDate.after(requestDate);
             } catch(ParseException e) {
