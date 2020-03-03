@@ -276,6 +276,7 @@ public class Response {
             body = new ResBody(process.getInputStream());
             headers.addHeader("Content-Length", String.valueOf(body.getLength()));
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;

@@ -1,18 +1,20 @@
 package server.response;
 
-/* Used code from: https://stackoverflow.com/questions/858980/file-to-byte-in-java */
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 
 public class ResBody {
 
     private byte[] body;
 
-    public ResBody(InputStream in) throws IOException { // Script Body
-        body = in.readAllBytes();
+    public ResBody(InputStream is) throws IOException { // Script Body
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        String strBody = "";
+        String line;
+        while((line = reader.readLine()) != null) {
+            strBody += line + "\n";
+        }
+        body = strBody.getBytes();
     }
 
     public ResBody(String uri) throws IOException { // File Body
