@@ -20,15 +20,18 @@ public class AccessCheck {
     private HashMap<String, String> directives;
     private HashMap<String, String> username_password;
 
-    public AccessCheck() throws IOException {
+    public AccessCheck() {
         directives = new HashMap<>();
-        username_password = new HashMap<>();
-        setDirectives();
-        setUsernamePasswords();
+        username_password = new HashMap<>();;
     }
 
-    public void check(Request request) throws Unauthorized, Forbidden {
-        if(accessExist(request)) {
+    public void check(Request request) throws Unauthorized, Forbidden, IOException {
+        String mockAccessFile = request.getId().getURI();
+        mockAccessFile = mockAccessFile.substring(0, mockAccessFile.lastIndexOf("/") + 1);
+        mockAccessFile += Configuration.getHttpd().getAccessFile();
+        if(accessExist(mockAccessFile)) {
+            setDirectives(mockAccessFile);
+            setUsernamePasswords();
             if(hasAuthHeader(request)) {
                 if(validUsernamePassword(request)) {
                     System.out.println("******ACCESS-GRANTED******");
@@ -45,10 +48,7 @@ public class AccessCheck {
         return request.getRequestHeaders().hasHeader("Authorization");
     }
 
-    private boolean accessExist(Request request) {
-        String mockAccessFile = request.getId().getURI();
-        mockAccessFile = mockAccessFile.substring(0, mockAccessFile.lastIndexOf("/"));
-        mockAccessFile += "/.htaccess"; // += / + Configuration.accessFile
+    private boolean accessExist(String mockAccessFile) {
         return Files.exists(Paths.get(mockAccessFile));
     }
 
@@ -90,9 +90,9 @@ public class AccessCheck {
     }
 
 
-    private void setDirectives() throws IOException {
+    private void setDirectives(String accessFile) throws IOException {
         String line, key, value;
-        BufferedReader reader = new BufferedReader(new FileReader(Configuration.getHttpd().getAccessFile()));
+        BufferedReader reader = new BufferedReader(new FileReader(accessFile));
         while((line = reader.readLine()) != null) {
             key = line.substring(0, line.indexOf(" ")).trim();
             value = stripQuotes(line.substring(line.indexOf(" ")).trim());
