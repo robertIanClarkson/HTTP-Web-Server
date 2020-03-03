@@ -11,7 +11,7 @@ public class ResBody {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String strBody = "";
         String line;
-        while((line = reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             strBody += line + "\n";
         }
         body = strBody.getBytes();
