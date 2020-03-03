@@ -7,9 +7,9 @@ import server.response.exception.NotFound;
 import server.response.exception.NotModified;
 
 import java.io.*;
-import java.nio.Buffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -31,6 +31,7 @@ public class Response {
             case "304":
                 code = new ResCode("304");
                 phrase = new ResPhrase(handlePhrase(code));
+                break;
             case "400": // Bad Request
                 code = new ResCode("400");
                 phrase = new ResPhrase(handlePhrase(code));
@@ -132,14 +133,16 @@ public class Response {
     private void handlePOST(Request request) throws InternalServerError, NotFound, NotModified {
         headers.addHeader("Connection", "close");
         if(request.hasScriptAlias()) {
-            if(!runScript(request)) {
+            if(runScript(request)) {
+                System.out.println("******Script \"" + request.getId().getOriginalURI() + "\" Ran Successfully******");
+            } else {
                 throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
             }
         } else {
             String uri = request.getId().getURI();
             if (Files.notExists(Paths.get(uri))) {
                 throw new NotFound(uri);
-            } else if (!modified(uri)) {
+            } else if (!modified(request)) {
                 throw new NotModified("File \"" + uri + "\" was not modified");
             } else {
                 String extension = uri.substring(uri.lastIndexOf(".") + 1);
@@ -167,9 +170,9 @@ public class Response {
         } else {
             String uri = request.getId().getURI();
             if (Files.notExists(Paths.get(uri))) {
-                throw new NotFound(uri);
-            } else if (!modified(uri)) {
-                throw new NotModified("File \"" + uri + "\" was not modified");
+                throw new NotFound(request.getId().getOriginalURI());
+            } else if (!modified(request)) {
+                throw new NotModified("File \"" + request.getId().getOriginalURI() + "\" was not modified");
             } else {
                 String extension = uri.substring(uri.lastIndexOf(".") + 1);
                 headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
@@ -185,7 +188,23 @@ public class Response {
         phrase = new ResPhrase(handlePhrase(code));
     }
 
-    private boolean modified(String uri) {
+    private boolean modified(Request request) throws InternalServerError {
+        if(request.getRequestHeaders().hasHeader("If-Modified-Since")) {
+            String requestDateValue = request.getRequestHeaders().getHeader("If-Modified-Since");
+            requestDateValue = requestDateValue.substring(requestDateValue.indexOf(" ") + 1);
+            SimpleDateFormat requestDatePattern = new SimpleDateFormat("dd MMM yyyy HH:mm:ss zzz");
+            String uri = request.getId().getURI();
+            File file = new File(uri);
+            SimpleDateFormat fileDatePattern = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            try {
+                Date requestDate = requestDatePattern.parse(requestDateValue);
+                System.out.println(fileDatePattern.format(file.lastModified()));
+                Date fileDate = fileDatePattern.parse(fileDatePattern.format(file.lastModified()));
+                return fileDate.after(requestDate);
+            } catch(ParseException e) {
+                throw new InternalServerError("Failed to parse Request Date");
+            }
+        }
         return true;
     }
 
@@ -199,6 +218,8 @@ public class Response {
                 return "No Content";
             case "301" :
                 return "Moved Permanently";
+            case "304" :
+                return "Not Modified";
             case "400" :
                 return "Bad Request";
             case "401" :
