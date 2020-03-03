@@ -129,24 +129,28 @@ public class Response {
         phrase = new ResPhrase(handlePhrase(code));
     }
 
-    private void handlePOST(Request request) throws InternalServerError, IOException, NotFound {
+    private void handlePOST(Request request) throws InternalServerError, NotFound, NotModified {
+        headers.addHeader("Connection", "close");
         if(request.hasScriptAlias()) {
             if(!runScript(request)) {
                 throw new InternalServerError("Failed to run script \"" + request.getId().getOriginalURI() + "\"");
             }
-        }
-        headers.addHeader("Connection", "close");
-        String uri = request.getId().getURI();
-        if(Files.notExists(Paths.get(uri))){
-            throw new NotFound(uri);
-        }
-        String extension = uri.substring(uri.lastIndexOf(".") + 1);
-        headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
-        try {
-            body = new ResBody(request.getId().getURI());
-            headers.addHeader("Content-Length", String.valueOf(body.getLength()));
-        } catch (Exception e) {
-            System.out.println("Notice: Response.handleGet --> No Body");
+        } else {
+            String uri = request.getId().getURI();
+            if (Files.notExists(Paths.get(uri))) {
+                throw new NotFound(uri);
+            } else if (!modified(uri)) {
+                throw new NotModified("File \"" + uri + "\" was not modified");
+            } else {
+                String extension = uri.substring(uri.lastIndexOf(".") + 1);
+                headers.addHeader("Content-Type", Configuration.getMime().getMimeType(extension));
+                try {
+                    body = new ResBody(request.getId().getURI());
+                    headers.addHeader("Content-Length", String.valueOf(body.getLength()));
+                } catch (Exception e) {
+                    System.out.println("Notice: Response.handleGet --> No Body");
+                }
+            }
         }
         code = new ResCode("200");
         phrase = new ResPhrase(handlePhrase(code));
